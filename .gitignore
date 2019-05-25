@@ -3,3 +3,11 @@
 ################################################################################
 
 /.vs/Quantis.Workflow.Complete
+/Quantis.WorkFlow.APIBase/bin/Release/netcoreapp2.2
+/Quantis.WorkFlow.APIBase/obj
+/Quantis.WorkFlow.Models/bin
+/Quantis.WorkFlow.Models/obj
+/Quantis.WorkFlow.Services/bin/Release/netcoreapp2.2
+/Quantis.WorkFlow.Services/obj
+/Quantis.WorkFlow.UnitTest/bin
+/Quantis.WorkFlow.UnitTest/obj

@@ -1,0 +1,54 @@
+﻿using Quantis.WorkFlow.Services.DTOs.API;
+using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Quantis.WorkFlow.Services.API
+{
+    public interface IDataService
+    {
+        List<WidgetDTO> GetAllWidgets();
+        WidgetDTO GetWidgetById(int Id);
+        bool AddUpdateWidget(WidgetDTO dto);
+
+        List<UserDTO> GetAllUsers();
+        UserDTO GetUserById(string UserId);
+        bool AddUpdateUser(UserDTO dto);
+
+        List<PageDTO> GetAllPages();
+        PageDTO GetPageById(int Id);
+        bool AddUpdatePage(PageDTO dto);
+
+        List<GroupDTO> GetAllGroups();
+        GroupDTO GetGroupById(int Id);
+        bool AddUpdateGroup(GroupDTO dto);
+
+        List<CatalogKpiDTO> GetAllKpis();
+        CatalogKpiDTO GetKpiById(int Id);
+        bool AddUpdateKpi(CatalogKpiDTO dto);
+        List<KpiByFormIdDTO> GetKpiByFormId(string Id);
+
+        List<ApiDetailsDTO> GetAllAPIs();
+
+        FormRuleDTO GetFormRuleByFormId(int Id);
+        bool AddUpdateFormRule(FormRuleDTO dto);
+        bool RemoveAttachment(int Id);
+
+        LoginResultDTO Login(string username, string password);
+        bool SumbitForm(SubmitFormDTO dto);
+
+        int ArchiveKPIs(ArchiveKPIDTO dto);
+        bool ResetPassword(string username, string email);
+
+        List<ARulesDTO> GetAllArchiveKPIs(string month, string year);
+        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
+
+        string GetUserIdByUserName(string name);
+        CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
+
+        //List<FormAttachmentDTO> GetAttachmentsByFormID(int formId);
+        //FormDTO GetFormByKPIID(int kpiId);
+
+    }
+}
