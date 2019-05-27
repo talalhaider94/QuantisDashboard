@@ -15,6 +15,7 @@ namespace Quantis.WorkFlow.Models
         public int year { get; set; }
         public string doc_name { get; set; }
         public string checksum { get; set; }
+        public virtual T_Form Form { get; set; }
     }
     public class T_FormAttachment_Configuration : IEntityTypeConfiguration<T_FormAttachment>
     {
@@ -22,6 +23,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_form_attachments");
             builder.HasKey(o => o.t_form_attachments_id);
+            builder.HasOne(o => o.Form).WithMany(o => o.Attachments).IsRequired();
 
         }
     }

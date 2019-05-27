@@ -54,7 +54,7 @@ namespace Quantis.Workflow.Complete
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");
             Quantis.WorkFlow.APIBase.BaseAPIRegistry.RegisterServices(services);
             services.AddDbContext<WorkFlowPostgreSqlContext>(options =>
-                options.UseNpgsql(
+                options.UseLazyLoadingProxies().UseNpgsql(
                     sqlConnectionString,
                     b => b.MigrationsAssembly("AspNet5MultipleProject")
                 )

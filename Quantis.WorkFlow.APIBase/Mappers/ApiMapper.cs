@@ -7,9 +7,9 @@ using Quantis.WorkFlow.Services.DTOs.API;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class ApiMapper : MappingService<ApiDetailsDTO, T_API_DETAILS>
+    public class ApiMapper : MappingService<ApiDetailsDTO, T_APIDetail>
     {
-        public override ApiDetailsDTO GetDTO(T_API_DETAILS e)
+        public override ApiDetailsDTO GetDTO(T_APIDetail e)
         {
             return new ApiDetailsDTO()
             {
@@ -25,7 +25,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override T_API_DETAILS GetEntity(ApiDetailsDTO o, T_API_DETAILS e)
+        public override T_APIDetail GetEntity(ApiDetailsDTO o, T_APIDetail e)
         {
             e.server_address = o.server_address;
             e.api_method = o.api_method;

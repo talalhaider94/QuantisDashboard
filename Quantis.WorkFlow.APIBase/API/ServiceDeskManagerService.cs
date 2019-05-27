@@ -297,6 +297,17 @@ namespace Quantis.WorkFlow.APIBase.API
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
                 ret= parseTickets(ticket).FirstOrDefault();
+                var attachments = _dataService.GetAttachmentsByKPIID(Id);
+                foreach(var att in attachments)
+                {
+                    Dictionary<string, string> param = new Dictionary<string, string>();
+                    param.Add("sid", _sid + "");
+                    param.Add("repositoryHandle", "doc_rep:1002");
+                    param.Add("objectHandle", "cr:"+ ret.ref_num);
+                    param.Add("description", att.doc_name);
+                    param.Add("fileName", att.doc_name);
+                    SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
+                }
             }
             catch (Exception e)
             {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class T_GLOBAL_RULES
+    public class T_GlobalRule
     {
         public int global_rule_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
@@ -29,9 +29,9 @@ namespace Quantis.WorkFlow.Models
         public string global_rule_name_key { get; set; }
 
     }
-    public class T_GLOBAL_RULES_Configuration : IEntityTypeConfiguration<T_GLOBAL_RULES>
+    public class T_GlobalRule_Configuration : IEntityTypeConfiguration<T_GlobalRule>
     {
-        public void Configure(EntityTypeBuilder<T_GLOBAL_RULES> builder)
+        public void Configure(EntityTypeBuilder<T_GlobalRule> builder)
         {
             builder.ToTable("t_global_rules");
             builder.HasKey(o => o.global_rule_id);

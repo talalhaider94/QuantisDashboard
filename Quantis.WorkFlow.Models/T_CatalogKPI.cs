@@ -6,14 +6,14 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class T_CATALOG_KPI
+    public class T_CatalogKPI
     {
         public int id { get; set; }
         public string short_name { get; set; }
         public string group_type { get; set; }
         public string id_kpi { get; set; }
         public string id_alm { get; set; }
-        public string id_form { get; set; }
+        public int? id_form { get; set; }
         public string kpi_description { get; set; }
         public string kpi_computing_description { get; set; }
         public string source_type { get; set; }
@@ -49,14 +49,16 @@ namespace Quantis.WorkFlow.Models
         public string supply { get; set; }
         public string primary_contract_party { get; set; }
         public string secondary_contract_party { get; set; }
+        public virtual T_Form Form { get; set; }
 
     }
-    public class T_CATALOG_KPI_Configuration : IEntityTypeConfiguration<T_CATALOG_KPI>
+    public class T_CatalogKPI_Configuration : IEntityTypeConfiguration<T_CatalogKPI>
     {
-        public void Configure(EntityTypeBuilder<T_CATALOG_KPI> builder)
+        public void Configure(EntityTypeBuilder<T_CatalogKPI> builder)
         {
-            builder.ToTable("t_catalog_kpi");
+            builder.ToTable("t_catalog_kpis");
             builder.HasKey(o => new { o.id_kpi, o.id });
+            builder.HasOne(o => o.Form).WithOne(p => p.CatalogKPI);
         }
     }
 }

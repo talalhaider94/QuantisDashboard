@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class T_CUSTOMERS
+    public class T_Customer
     {
         public int customer_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
@@ -31,9 +31,9 @@ namespace Quantis.WorkFlow.Models
         public DateTime customer_modify_date { get; set; }
 
     }
-    public class T_CUSTOMERS_Configuration : IEntityTypeConfiguration<T_CUSTOMERS>
+    public class T_Customer_Configuration : IEntityTypeConfiguration<T_Customer>
     {
-        public void Configure(EntityTypeBuilder<T_CUSTOMERS> builder)
+        public void Configure(EntityTypeBuilder<T_Customer> builder)
         {
             builder.ToTable("t_customers");
             builder.HasKey(o => o.customer_id);

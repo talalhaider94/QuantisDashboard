@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class CatalogKpiMapper : MappingService<CatalogKpiDTO, T_CATALOG_KPI>
+    public class CatalogKpiMapper : MappingService<CatalogKpiDTO, T_CatalogKPI>
     {
-        public override CatalogKpiDTO GetDTO(T_CATALOG_KPI e)
+        public override CatalogKpiDTO GetDTO(T_CatalogKPI e)
         {
             return new CatalogKpiDTO()
             {
@@ -57,7 +57,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override T_CATALOG_KPI GetEntity(CatalogKpiDTO o, T_CATALOG_KPI e)
+        public override T_CatalogKPI GetEntity(CatalogKpiDTO o, T_CatalogKPI e)
         {
             e.short_name = o.short_name;
             e.group_type = o.group_type;

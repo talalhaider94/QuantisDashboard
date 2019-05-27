@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class T_RULES
+    public class T_Rule
     {
         public int rule_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
@@ -58,9 +58,9 @@ namespace Quantis.WorkFlow.Models
         public string is_parameters_dirty { get; set; }
 
     }
-    public class T_RULES_Configuration : IEntityTypeConfiguration<T_RULES>
+    public class T_Rule_Configuration : IEntityTypeConfiguration<T_Rule>
     {
-        public void Configure(EntityTypeBuilder<T_RULES> builder)
+        public void Configure(EntityTypeBuilder<T_Rule> builder)
         {
             builder.ToTable("t_rules");
             builder.HasKey(o => o.rule_id);

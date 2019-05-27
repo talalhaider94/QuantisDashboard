@@ -16,7 +16,7 @@ namespace Quantis.WorkFlow.Models
     {
         public void Configure(EntityTypeBuilder<T_APIAuthentication> builder)
         {
-            builder.ToTable("t_apiauthentication");
+            builder.ToTable("t_api_authentications");
             builder.HasKey(o => o.Id);
             builder.Property(o => o.Id).HasColumnName("id");
             builder.Property(o => o.Password).HasColumnName("password");

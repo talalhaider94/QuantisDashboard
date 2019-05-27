@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class T_API_DETAILS
+    public class T_APIDetail
     {
         public int api_id { get; set; }
         public string server_address { get; set; }
@@ -18,9 +18,9 @@ namespace Quantis.WorkFlow.Models
         public string db_source { get; set; }
         public string table_used { get; set; }
     }
-    public class T_API_DETAILS_Configuration : IEntityTypeConfiguration<T_API_DETAILS>
+    public class T_APIDetail_Configuration : IEntityTypeConfiguration<T_APIDetail>
     {
-        public void Configure(EntityTypeBuilder<T_API_DETAILS> builder)
+        public void Configure(EntityTypeBuilder<T_APIDetail> builder)
         {
             builder.ToTable("t_api_details");
             builder.HasKey(o => o.api_id);

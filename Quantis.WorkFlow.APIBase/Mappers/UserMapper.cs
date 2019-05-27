@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class UserMapper : MappingService<UserDTO, Catalog_Users>
+    public class UserMapper : MappingService<UserDTO, T_CatalogUser>
     {
-        public override UserDTO GetDTO(Catalog_Users e)
+        public override UserDTO GetDTO(T_CatalogUser e)
         {
             return new UserDTO()
             {
@@ -27,7 +27,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override Catalog_Users GetEntity(UserDTO o, Catalog_Users e)
+        public override T_CatalogUser GetEntity(UserDTO o, T_CatalogUser e)
         {
             e.ca_bsi_account = o.ca_bsi_account;
             e.name = o.name;

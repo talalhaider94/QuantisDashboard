@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class Catalog_Users
+    public class T_CatalogUser
     {
         public int id { get; set; }
         public string ca_bsi_account { get; set; }
@@ -20,9 +20,9 @@ namespace Quantis.WorkFlow.Models
         public bool user_admin { get; set; }
         public bool user_sadmin { get; set; }
     }
-    public class Catalog_Users_Configuration : IEntityTypeConfiguration<Catalog_Users>
+    public class T_CatalogUser_Configuration : IEntityTypeConfiguration<T_CatalogUser>
     {
-        public void Configure(EntityTypeBuilder<Catalog_Users> builder)
+        public void Configure(EntityTypeBuilder<T_CatalogUser> builder)
         {
             builder.ToTable("t_catalog_users");
             builder.HasKey(o => new { o.userid, o.id });
