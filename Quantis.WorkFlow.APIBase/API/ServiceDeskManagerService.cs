@@ -134,6 +134,28 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
+        public List<SDMAttachmentDTO> GetAttachmentsByTicket(int ticketId)
+        {
+            List<SDMAttachmentDTO> ret = null;
+            LogIn();
+            try
+            {
+                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[0]);
+                selecta.Wait();
+                var sel = selecta.Result.doSelectReturn;
+                ret = parseAttachments(sel);
+            }
+            catch (Exception e)
+            {
+                LogException(e, LogLevel.Error);
+                LogOut();
+            }
+            finally
+            {
+                LogOut();
+            }
+            return ret;
+        }
         public byte[] DownloadAttachment(string attachmentHandle)
         {
             byte[] ret = null;
@@ -478,6 +500,28 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public List<SDMTicketLogDTO> GetTicketHistory(int ticketId)
+        {
+            List<SDMTicketLogDTO> ret = null;
+            LogIn();
+            try
+            {
+                var selecta = _sdmClient.doSelectAsync(_sid, "alg", "call_req_id='cr:"+ ticketId + "'", 99999, new string[0]);
+                selecta.Wait();
+                var sel = selecta.Result.doSelectReturn;
+                ret = parseLogs(sel);
+            }
+            catch (Exception e)
+            {
+                LogException(e, LogLevel.Error);
+                LogOut();
+            }
+            finally
+            {
+                LogOut();
+            }
+            return ret;
+        }
         private bool CallUploadKPI(BSIKPIUploadDTO dto)
         {
             try
@@ -541,6 +585,42 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.Group = _groupMapping.FirstOrDefault(o => o.GroupHandler == dto.Group).GroupName;
                 }
+                dtos.Add(dto);
+            }
+            return dtos;
+        }
+        private List<SDMTicketLogDTO> parseLogs(string logs)
+        {
+            var dtos = new List<SDMTicketLogDTO>();
+            XDocument xdoc = XDocument.Parse(logs);
+            var lists = from uoslist in xdoc.Element("UDSObjectList").Elements("UDSObject") select uoslist;
+            foreach (var l in lists)
+            {
+                var attributes = l.Element("Attributes").Elements("Attribute");
+                SDMTicketLogDTO dto = new SDMTicketLogDTO();
+                dto.LogId = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "id").Element("AttrValue").Value;
+                dto.MsgBody = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "msg_body").Element("AttrValue").Value;
+                dto.TicketHandler = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "call_req_id").Element("AttrValue").Value;
+                dto.TicketStatus = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "cr_status").Element("AttrValue").Value;
+                dto.TimeStamp = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "time_stamp").Element("AttrValue").Value;
+                dto.ActionDescription = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "action_desc").Element("AttrValue").Value;
+                dto.Description = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "description").Element("AttrValue").Value;
+                dtos.Add(dto);
+            }
+            return dtos;
+        }
+        private List<SDMAttachmentDTO> parseAttachments(string logs)
+        {
+            var dtos = new List<SDMAttachmentDTO>();
+            XDocument xdoc = XDocument.Parse(logs);
+            var lists = from uoslist in xdoc.Element("UDSObjectList").Elements("UDSObject") select uoslist;
+            foreach (var l in lists)
+            {
+                var attributes = l.Element("Attributes").Elements("Attribute");
+                SDMAttachmentDTO dto = new SDMAttachmentDTO();
+                dto.AttachmentHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "persistent_id").Element("AttrValue").Value;
+                dto.AttachmentName = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt_name").Element("AttrValue").Value;
+                dto.TicketHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attached_persid").Element("AttrValue").Value;
                 dtos.Add(dto);
             }
             return dtos;
