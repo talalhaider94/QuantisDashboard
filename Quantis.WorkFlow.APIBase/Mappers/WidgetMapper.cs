@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class WidgetMapper : MappingService<WidgetDTO, T_WIDGET>
+    public class WidgetMapper : MappingService<WidgetDTO, T_Widget>
     {
-        public override WidgetDTO GetDTO(T_WIDGET e)
+        public override WidgetDTO GetDTO(T_Widget e)
         {
             return new WidgetDTO()
             {
@@ -28,7 +28,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override T_WIDGET GetEntity(WidgetDTO o, T_WIDGET e)
+        public override T_Widget GetEntity(WidgetDTO o, T_Widget e)
         {
             e.chart_description = o.chart_description;
             e.chart_description_see = o.chart_description_see;

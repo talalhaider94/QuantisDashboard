@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class FormRuleMapper : MappingService<FormRuleDTO, T_FORM_Rule>
+    public class FormRuleMapper : MappingService<FormRuleDTO, T_FormRule>
     {
-        public override FormRuleDTO GetDTO(T_FORM_Rule e)
+        public override FormRuleDTO GetDTO(T_FormRule e)
         {
             return new FormRuleDTO()
             {
@@ -21,7 +21,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override T_FORM_Rule GetEntity(FormRuleDTO o, T_FORM_Rule e)
+        public override T_FormRule GetEntity(FormRuleDTO o, T_FormRule e)
         {
             e.form_body = o.form_body;
             e.end_date =o.end_date;

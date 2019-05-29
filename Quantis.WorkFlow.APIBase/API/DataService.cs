@@ -16,20 +16,20 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Net;
 using System.Web.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
     public class DataService : BaseService<DataService>,IDataService
     {
 
-        private IMappingService<GroupDTO, T_GROUP> _groupMapper;
-        private IMappingService<PageDTO, T_PAGE> _pageMapper;
-        private IMappingService<WidgetDTO, T_WIDGET> _widgetMapper;
-        private IMappingService<KpiByFormIdDTO, T_CATALOG_KPI> _kpibyformidMapper;
-        private IMappingService<UserDTO, Catalog_Users> _userMapper;
-        private IMappingService<FormRuleDTO, T_FORM_Rule> _formRuleMapper;
-        private IMappingService<CatalogKpiDTO, T_CATALOG_KPI> _catalogKpiMapper;
-        private IMappingService<ApiDetailsDTO,T_API_DETAILS> _apiMapper;
+        private IMappingService<GroupDTO, T_Group> _groupMapper;
+        private IMappingService<PageDTO, T_Page> _pageMapper;
+        private IMappingService<WidgetDTO, T_Widget> _widgetMapper;
+        private IMappingService<UserDTO, T_CatalogUser> _userMapper;
+        private IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
+        private IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
+        private IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
         private IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;        
         private IOracleDataService _oracleAPI;
         private IConfiguration _configuration;
@@ -37,14 +37,13 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public DataService(WorkFlowPostgreSqlContext context,
             ILogger<DataService> logger,
-            IMappingService<GroupDTO, T_GROUP> groupMapper, 
-            IMappingService<PageDTO, T_PAGE> pageMapper, 
-            IMappingService<WidgetDTO, T_WIDGET> widgetMapper,
-            IMappingService<KpiByFormIdDTO, T_CATALOG_KPI> kpibyformidMapper,
-            IMappingService<UserDTO, Catalog_Users> userMapper,
-            IMappingService<FormRuleDTO, T_FORM_Rule> formRuleMapper,
-            IMappingService<CatalogKpiDTO, T_CATALOG_KPI> catalogKpiMapper,
-            IMappingService<ApiDetailsDTO, T_API_DETAILS> apiMapper,
+            IMappingService<GroupDTO, T_Group> groupMapper, 
+            IMappingService<PageDTO, T_Page> pageMapper, 
+            IMappingService<WidgetDTO, T_Widget> widgetMapper,
+            IMappingService<UserDTO, T_CatalogUser> userMapper,
+            IMappingService<FormRuleDTO, T_FormRule> formRuleMapper,
+            IMappingService<CatalogKpiDTO, T_CatalogKPI> catalogKpiMapper,
+            IMappingService<ApiDetailsDTO, T_APIDetail> apiMapper,
             IMappingService<FormAttachmentDTO, T_FormAttachment> fromAttachmentMapper,
             IConfiguration configuration,
             ISMTPService smtpService,
@@ -53,7 +52,6 @@ namespace Quantis.WorkFlow.APIBase.API
             _groupMapper = groupMapper;
             _pageMapper = pageMapper;
             _widgetMapper = widgetMapper;
-            _kpibyformidMapper = kpibyformidMapper;
             _userMapper = userMapper;
             _formRuleMapper = formRuleMapper;
             _catalogKpiMapper = catalogKpiMapper;
@@ -63,12 +61,16 @@ namespace Quantis.WorkFlow.APIBase.API
             _configuration = configuration;
             _smtpService = smtpService;
         }
+        public bool CronJobsScheduler()
+        {
+            return true;
 
+        }
         public bool AddUpdateFormRule(FormRuleDTO dto)
         {
             try
             {
-                var entity = new T_FORM_Rule();
+                var entity = new T_FormRule();
                 if (dto.form_id > 0)
                 {
                     entity = _dbcontext.FormRules.FirstOrDefault(o => o.form_id == dto.form_id);
@@ -115,7 +117,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new T_GROUP();
+                var entity = new T_Group();
                 if (dto.group_id > 0)
                 {
                     entity = _dbcontext.Groups.FirstOrDefault(o => o.group_id == dto.group_id);
@@ -140,7 +142,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new T_PAGE();
+                var entity = new T_Page();
                 if (dto.page_id > 0)
                 {
                     entity = _dbcontext.Pages.FirstOrDefault(o => o.page_id == dto.page_id);
@@ -183,7 +185,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new Catalog_Users();
+                var entity = new T_CatalogUser();
                 if (dto.id > 0)
                 {
                     entity = _dbcontext.CatalogUsers.FirstOrDefault(o => o.id == dto.id);
@@ -209,7 +211,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new T_WIDGET();
+                var entity = new T_Widget();
                 if (dto.widget_id > 0)
                 {
                     entity = _dbcontext.Widgets.FirstOrDefault(o => o.widget_id == dto.widget_id);
@@ -232,7 +234,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new T_CATALOG_KPI();
+                var entity = new T_CatalogKPI();
                 if (dto.id > 0)
                 {
                     entity = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == dto.id);
@@ -270,7 +272,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var apis = _dbcontext.ApiDetails;
+                var apis = _dbcontext.ApiDetails.ToList();
                 return _apiMapper.GetDTOs(apis.ToList());
             }
             catch (Exception e)
@@ -284,7 +286,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var kpis = _dbcontext.CatalogKpi;
+                var kpis = _dbcontext.CatalogKpi.ToList();
                 return _catalogKpiMapper.GetDTOs(kpis.ToList());
             }
             catch (Exception e)
@@ -299,7 +301,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var pages = _dbcontext.Pages;
+                var pages = _dbcontext.Pages.ToList();
                 return _pageMapper.GetDTOs(pages.ToList());
             }
             catch (Exception e)
@@ -314,7 +316,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var users = _dbcontext.CatalogUsers;
+                var users = _dbcontext.CatalogUsers.ToList();
                 return _userMapper.GetDTOs(users.ToList());                
             }
             catch (Exception e)
@@ -437,24 +439,18 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
 
-        public List<KpiByFormIdDTO> GetKpiByFormId(string Id)
+        public KPIOnlyContractDTO GetKpiByFormId(int Id)
         {
             try
             {
-                var kpi = _dbcontext.CatalogKpi.Where(o => o.id_form.Contains(Id));
-                List<T_CATALOG_KPI> newKpi = new List<T_CATALOG_KPI>();
-                foreach(var k in kpi)
+                var kpi = _dbcontext.Forms.Include(o => o.CatalogKPI).Single(o => o.form_id == Id);
+                var dto = new KPIOnlyContractDTO()
                 {
-                   var temp = k.id_form.Split(new char[] { '$' });
-                    foreach(var i in temp)
-                    {
-                        if (i == Id)
-                        {
-                            newKpi.Add(k);
-                        }
-                    }
-                }
-                return _kpibyformidMapper.GetDTOs(newKpi.ToList());
+                    contract = kpi.CatalogKPI.contract,
+                    id_kpi = kpi.CatalogKPI.id_kpi
+                };
+                return dto;
+
             }
             catch (Exception e)
             {
@@ -487,7 +483,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var form_log = new T_FormLog()
                     {
                         empty_form = dto.empty_form,
-                        id_form = dto.form_id+"",
+                        id_form = dto.form_id,
                         id_locale = dto.locale_id,
                         period = dto.period,
                         time_stamp = DateTime.Now,
@@ -504,7 +500,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         notifier_log = new T_NotifierLog()
                         {
-                            id_form = dto.form_id + "",
+                            id_form = dto.form_id,
                             notify_timestamp = DateTime.Now,
                             remind_timestamp = null,
                             is_ack = true,
@@ -810,8 +806,26 @@ namespace Quantis.WorkFlow.APIBase.API
                 return null;
             }
         }
+        public List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId)
+        {
+            try
+            {
+                var form=_dbcontext.CatalogKpi.Single(o=>o.id==kpiId).id_form;
+                if (form == 0)
+                {
+                    throw new Exception("No form Available for KPI " + kpiId);
+                }
+                var attachments = _dbcontext.Forms.Include(o => o.Attachments).Single(p => p.form_id == form).Attachments;
+                return _fromAttachmentMapper.GetDTOs(attachments.ToList());
 
-        //PRIVATE FUNCTIONS
+            }
+            catch (Exception e)
+            {
+                LogException(e, LogLevel.Error);
+                throw e;
+            }
+        }
+        #region privateFunctions
 
         private int getSessionTimeOut()
         {
@@ -864,7 +878,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
 
 
-        public bool TableExists(string tableName)
+        private bool TableExists(string tableName)
         {
             string sql = "SELECT * FROM information_schema.tables WHERE table_name = '" + tableName + "'";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
@@ -895,5 +909,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
+        #endregion
     }
 }

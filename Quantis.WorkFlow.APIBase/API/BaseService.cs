@@ -25,7 +25,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     message = e.Message.Substring(0, Math.Min(999, e.Message.Length)),
                     stacktrace = e.StackTrace.Substring(0, Math.Min(999, e.StackTrace.Length)),
-                    loglevel = l.ToString()
+                    loglevel = l.ToString(),
+                    timestamp = DateTime.Now
                 };
                 var inner_exception = e.InnerException;
                 while (inner_exception != null)

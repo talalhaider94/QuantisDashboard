@@ -31,15 +31,14 @@ namespace Quantis.WorkFlow.APIBase
         }
         public static void RegisterMappers(IServiceCollection services)
         {
-            services.AddTransient<IMappingService<GroupDTO, T_GROUP>, GroupMapper>();
-            services.AddTransient<IMappingService<UserDTO, Catalog_Users>, UserMapper>();
-            services.AddTransient<IMappingService<PageDTO, T_PAGE>, PageMapper>();
-            services.AddTransient<IMappingService<WidgetDTO, T_WIDGET>, WidgetMapper>();
-            services.AddTransient<IMappingService<FormRuleDTO, T_FORM_Rule>, FormRuleMapper>();
+            services.AddTransient<IMappingService<GroupDTO, T_Group>, GroupMapper>();
+            services.AddTransient<IMappingService<UserDTO, T_CatalogUser>, UserMapper>();
+            services.AddTransient<IMappingService<PageDTO, T_Page>, PageMapper>();
+            services.AddTransient<IMappingService<WidgetDTO, T_Widget>, WidgetMapper>();
+            services.AddTransient<IMappingService<FormRuleDTO, T_FormRule>, FormRuleMapper>();
             services.AddTransient<IMappingService<FormAttachmentDTO, T_FormAttachment>, FormAttachmentMapper>();
-            services.AddTransient<IMappingService<CatalogKpiDTO, T_CATALOG_KPI>, CatalogKpiMapper>();
-            services.AddTransient<IMappingService<KpiByFormIdDTO, T_CATALOG_KPI>, KpiByFormIdMapper>();
-            services.AddTransient<IMappingService<ApiDetailsDTO, T_API_DETAILS>, ApiMapper>();
+            services.AddTransient<IMappingService<CatalogKpiDTO, T_CatalogKPI>, CatalogKpiMapper>();
+            services.AddTransient<IMappingService<ApiDetailsDTO, T_APIDetail>, ApiMapper>();
         }
     }
 }

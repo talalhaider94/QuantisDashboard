@@ -19,7 +19,7 @@ using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 
-namespace Quantis.Workflow.Complete
+namespace Quantis.WorkFlow.Complete
 {
     public class Startup
     {
@@ -54,7 +54,7 @@ namespace Quantis.Workflow.Complete
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");
             Quantis.WorkFlow.APIBase.BaseAPIRegistry.RegisterServices(services);
             services.AddDbContext<WorkFlowPostgreSqlContext>(options =>
-                options.UseNpgsql(
+                options.UseLazyLoadingProxies().UseNpgsql(
                     sqlConnectionString,
                     b => b.MigrationsAssembly("AspNet5MultipleProject")
                 )

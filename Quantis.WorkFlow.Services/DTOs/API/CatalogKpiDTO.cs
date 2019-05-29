@@ -11,7 +11,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string group_type { get; set; }
         public string id_kpi { get; set; }
         public string id_alm { get; set; }
-        public string id_form { get; set; }
+        public int? id_form { get; set; }
         public string kpi_description { get; set; }
         public string kpi_computing_description { get; set; }
         public string source_type { get; set; }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Quantis.Workflow.Complete
+namespace Quantis.WorkFlow.Complete
 {
     public class Program
     {

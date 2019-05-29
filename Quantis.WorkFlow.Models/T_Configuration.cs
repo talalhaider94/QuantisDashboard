@@ -18,7 +18,7 @@ namespace Quantis.WorkFlow.Models
     {
         public void Configure(EntityTypeBuilder<T_Configuration> builder)
         {
-            builder.ToTable("t_configuration");
+            builder.ToTable("t_configurations");
             builder.HasKey(o => o.id);
         }
     }

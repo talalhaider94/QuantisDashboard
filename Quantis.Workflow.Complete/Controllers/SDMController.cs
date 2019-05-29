@@ -48,5 +48,20 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _sdmAPI.CreateTicketByKPIID(id);
         }
+        [HttpGet("GetTicketHistory")]
+        public List<SDMTicketLogDTO> GetTicketHistory(int ticketId)
+        {
+            return _sdmAPI.GetTicketHistory(ticketId);
+        }
+        [HttpGet("GetAttachmentsByTicket")]
+        public List<SDMAttachmentDTO> GetAttachmentsByTicket(int ticketId)
+        {
+            return _sdmAPI.GetAttachmentsByTicket(ticketId);
+        }
+        [HttpGet("DownloadAttachment")]
+        public byte[] DownloadAttachment(string attachmentHandle)
+        {
+            return _sdmAPI.DownloadAttachment(attachmentHandle);
+        }
     }
 }

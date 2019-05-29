@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
-    public class T_WIDGET
+    public class T_Widget
     {
         public int widget_id { get; set; }
         public string widget_configuration { get; set; }
@@ -22,9 +22,9 @@ namespace Quantis.WorkFlow.Models
         public DateTime? delete_date { get; set; }
 
     }
-    public class T_WIDGET_Configuration : IEntityTypeConfiguration<T_WIDGET>
+    public class T_Widget_Configuration : IEntityTypeConfiguration<T_Widget>
     {
-        public void Configure(EntityTypeBuilder<T_WIDGET> builder)
+        public void Configure(EntityTypeBuilder<T_Widget> builder)
         {
             builder.ToTable("t_widgets");
             builder.HasKey(o => o.widget_id);

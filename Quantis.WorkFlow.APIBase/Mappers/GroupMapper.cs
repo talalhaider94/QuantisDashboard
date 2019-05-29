@@ -7,9 +7,9 @@ using Quantis.WorkFlow.Services.DTOs.API;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class GroupMapper : MappingService<GroupDTO, T_GROUP>
+    public class GroupMapper : MappingService<GroupDTO, T_Group>
     {
-        public override GroupDTO GetDTO(T_GROUP e)
+        public override GroupDTO GetDTO(T_Group e)
         {
             return new GroupDTO()
             {
@@ -21,7 +21,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override T_GROUP GetEntity(GroupDTO o, T_GROUP e)
+        public override T_Group GetEntity(GroupDTO o, T_Group e)
         {
             e.group_description = o.group_description;
             e.modify_date = o.modify_date;

@@ -16,5 +16,7 @@ namespace Quantis.WorkFlow.Services.API
         SDMTicketLVDTO EscalateTicketbyKPIID(int id, string status,string description);
 
         byte[] DownloadAttachment(string attachmentHandle);
+        List<SDMAttachmentDTO> GetAttachmentsByTicket(int ticketId);
+        List<SDMTicketLogDTO> GetTicketHistory(int ticketId);
     }
 }

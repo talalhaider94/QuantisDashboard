@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
-    public class PageMapper : MappingService<PageDTO, T_PAGE>
+    public class PageMapper : MappingService<PageDTO, T_Page>
     {
-        public override PageDTO GetDTO(T_PAGE e)
+        public override PageDTO GetDTO(T_Page e)
         {
             return new PageDTO()
             {
@@ -20,7 +20,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             };
         }
 
-        public override T_PAGE GetEntity(PageDTO o, T_PAGE e)
+        public override T_Page GetEntity(PageDTO o, T_Page e)
         {
             e.page_name = o.page_name;
             e.page_sequence = o.page_sequence;
