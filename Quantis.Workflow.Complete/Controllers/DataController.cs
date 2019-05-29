@@ -23,6 +23,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             _dataAPI = dataAPI;
         }
+        [HttpGet("CronJobsScheduler")]
+        public bool CronJobsScheduler()
+        {
+            return _dataAPI.CronJobsScheduler();
+        }
         [HttpGet("GetAllWidgets")]
         public List<WidgetDTO> GetAllWidgets()
         {

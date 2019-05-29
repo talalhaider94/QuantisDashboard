@@ -8,6 +8,8 @@ namespace Quantis.WorkFlow.Services.API
 {
     public interface IDataService
     {
+        bool CronJobsScheduler();
+
         List<WidgetDTO> GetAllWidgets();
         WidgetDTO GetWidgetById(int Id);
         bool AddUpdateWidget(WidgetDTO dto);
