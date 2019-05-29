@@ -19,7 +19,7 @@ using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 
-namespace Quantis.Workflow.Complete
+namespace Quantis.WorkFlow.Complete
 {
     public class Startup
     {
