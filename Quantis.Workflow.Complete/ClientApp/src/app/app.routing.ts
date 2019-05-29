@@ -8,8 +8,23 @@ import { P404Component } from './views/error/404.component';
 import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
+import { ForgetComponent } from './views/forget/forget.component';
 
 export const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: {
+      title: 'Login Page'
+    }
+  },
+  {
+    path: 'forget',
+    component: ForgetComponent,
+    data: {
+      title: 'Forget Page'
+    }
+  },
   {
     path: '',
     redirectTo: 'dashboard',
@@ -27,13 +42,6 @@ export const routes: Routes = [
     component: P500Component,
     data: {
       title: 'Page 500'
-    }
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    data: {
-      title: 'Login Page'
     }
   },
   {
