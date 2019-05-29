@@ -61,7 +61,11 @@ namespace Quantis.WorkFlow.APIBase.API
             _configuration = configuration;
             _smtpService = smtpService;
         }
+        public bool CronJobsScheduler()
+        {
+            return true;
 
+        }
         public bool AddUpdateFormRule(FormRuleDTO dto)
         {
             try
