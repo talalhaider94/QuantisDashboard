@@ -69,6 +69,10 @@ export const routes: Routes = [
       {
         path: 'coming-soon',
         loadChildren: './views/comingsoon/comingsoon.module#ComingSoonModule'
+      },
+      {
+        path: 'loading-form',
+        loadChildren: './views/loading-form/loading-form.module#LoadingFormModule'
       }
     ]
   },

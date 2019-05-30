@@ -42,6 +42,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ReactiveFormsModule } from '@angular/forms';
+// import { LoadingFormComponent } from './views/loading-form/loading-form.component';
 // import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
 
 @NgModule({
@@ -70,6 +71,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     RegisterComponent,
     ForgetComponent,
+    // LoadingFormComponent,
     // CommingsoonComponent
   ],
   providers: [{
