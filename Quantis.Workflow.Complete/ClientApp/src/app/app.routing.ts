@@ -65,6 +65,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: './views/dashboard/dashboard.module#DashboardModule'
+      },
+      {
+        path: 'coming-soon',
+        loadChildren: './views/comingsoon/comingsoon.module#ComingSoonModule'
       }
     ]
   },

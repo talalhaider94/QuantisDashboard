@@ -3,6 +3,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { AuthService } from '../../_services';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit{
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService
   ) { 
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
       console.log('LOGIN IF')
@@ -46,15 +48,17 @@ export class LoginComponent implements OnInit{
   onLoginFormSubmit() {
     this.submitted = true;
     if (this.loginForm.invalid) {
-      // TODO: need to show popup alert for invalid form
+        this.toastr.error('Please fill the form correctly.', 'Error');
         return;
     } else {
       const { userName, password } = this.f;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
-        console.log('data', data)
+        console.log('onLoginFormSubmit: success', data);
         this.router.navigate([this.returnUrl]);
+        this.toastr.success('You are loggedin successfully', 'Success');
       }, error => {
-        console.log('error', error)
+        console.log('onLoginFormSubmit: error', error);
+        this.toastr.error(error.message, error.statusText);
       })
     }
     

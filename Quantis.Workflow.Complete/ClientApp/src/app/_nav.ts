@@ -39,74 +39,68 @@ export const navItems: NavData[] = [
       text: 'NEW'
     }
   },
-  // {
-  //   name: 'Base',
-  //   url: '/base',
-  //   icon: 'icon-puzzle',
-  //   children: [
-  //     {
-  //       name: 'Cards',
-  //       url: '/base/cards',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Carousels',
-  //       url: '/base/carousels',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Collapses',
-  //       url: '/base/collapses',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Forms',
-  //       url: '/base/forms',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Pagination',
-  //       url: '/base/paginations',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Popovers',
-  //       url: '/base/popovers',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Progress',
-  //       url: '/base/progress',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Switches',
-  //       url: '/base/switches',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Tables',
-  //       url: '/base/tables',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Tabs',
-  //       url: '/base/tabs',
-  //       icon: 'icon-puzzle'
-  //     },
-  //     {
-  //       name: 'Tooltips',
-  //       url: '/base/tooltips',
-  //       icon: 'icon-puzzle'
-  //     }
-  //   ]
-  // },
-  {
-    divider: true
-  },
   {
     title: true,
-    name: 'Main Pages',
+    name: 'Menu',
+  },
+  {
+    name: 'Home',
+    url: '/coming-soon',
+    icon: 'icon-home',
+    children: [
+      {
+        name: 'Contraenti', 
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Contratti',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
+  },
+  {
+    name: 'Workflow',
+    url: '/coming-soon',
+    icon: 'fa fa-code-fork',
+    children: [
+      {
+        name: 'KPI in Verifica', 
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Ricerca',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
+  },
+  {
+    name: 'Catalogo',
+    url: '/coming-soon',
+    icon: 'icon-doc',
+  },
+  {
+    name: 'Loading Form',
+    url: '/coming-soon',
+    icon: 'fa fa-edit',
+    children: [
+      {
+        name: 'Admin', 
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Utente',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
+  },
+  {
+    divider: true
   },
   {
     name: 'Pages',
@@ -116,11 +110,6 @@ export const navItems: NavData[] = [
       {
         name: 'Login',
         url: '/login',
-        icon: 'icon-star'
-      },
-      {
-        name: 'Register',
-        url: '/register',
         icon: 'icon-star'
       },
       {

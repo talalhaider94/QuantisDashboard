@@ -25,7 +25,7 @@
                   </div>
                   <!-- display password error -->
                   <span class="text-danger mb-3" *ngIf="submitted && f.password.errors && f.password.errors.required">Password is required</span>
-                  <span class="text-danger mb-3" *ngIf="submitted && f.password.errors && f.password.errors.minlength">Password must be at least 6 characters</span>
+                  <span class="text-danger mb-3" *ngIf="submitted && f.password.errors && f.password.errors.minlength">Password must be at least 4 characters</span>
                   <div class="row">
                     <div class="col-6">
                       <button type="submit" class="btn btn-primary px-4">Login</button>

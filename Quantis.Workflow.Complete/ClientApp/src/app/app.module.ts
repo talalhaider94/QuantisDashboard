@@ -5,7 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -41,6 +42,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ReactiveFormsModule } from '@angular/forms';
+// import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
 
 @NgModule({
   imports: [
@@ -56,7 +58,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     TabsModule.forRoot(),
     ChartsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot() // ToastrModule added
   ],
   declarations: [
     AppComponent,
@@ -65,7 +69,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     P500Component,
     LoginComponent,
     RegisterComponent,
-    ForgetComponent
+    ForgetComponent,
+    // CommingsoonComponent
   ],
   providers: [{
     provide: LocationStrategy, 
