@@ -40,28 +40,67 @@ export const navItems: NavData[] = [
     }
   },
   {
+    title: true,
+    name: 'Menu',
+  },
+  {
     name: 'Home',
-    url: '/base',
-    icon: 'icon-note',
+    url: '/coming-soon',
+    icon: 'icon-home',
     children: [
       {
-        name: 'Contraenti',
-        url: '',
-        icon: 'icon-circle'
+        name: 'Contraenti', 
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
       },
       {
         name: 'Contratti',
-        url: '',
-        icon: 'icon-circle'
-      }
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
+  },
+  {
+    name: 'Workflow',
+    url: '/coming-soon',
+    icon: 'fa fa-code-fork',
+    children: [
+      {
+        name: 'KPI in Verifica', 
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Ricerca',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
+  },
+  {
+    name: 'Catalogo',
+    url: '/coming-soon',
+    icon: 'icon-doc',
+  },
+  {
+    name: 'Loading Form',
+    url: '/coming-soon',
+    icon: 'fa fa-edit',
+    children: [
+      {
+        name: 'Admin', 
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Utente',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
     ]
   },
   {
     divider: true
-  },
-  {
-    title: true,
-    name: 'Main Pages',
   },
   {
     name: 'Pages',
@@ -71,11 +110,6 @@ export const navItems: NavData[] = [
       {
         name: 'Login',
         url: '/login',
-        icon: 'icon-star'
-      },
-      {
-        name: 'Register',
-        url: '/register',
         icon: 'icon-star'
       },
       {
