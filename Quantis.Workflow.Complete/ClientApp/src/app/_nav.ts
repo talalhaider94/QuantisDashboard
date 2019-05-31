@@ -36,7 +36,7 @@ export const navItems: NavData[] = [
     icon: 'icon-speedometer',
     badge: {
       variant: 'info',
-      text: 'NEW'
+      text: ''
     }
   },
   {
@@ -49,7 +49,7 @@ export const navItems: NavData[] = [
     icon: 'icon-home',
     children: [
       {
-        name: 'Contraenti', 
+        name: 'Contraenti',
         url: '/coming-soon',
         icon: 'fa fa-circle-thin'
       },
@@ -66,8 +66,8 @@ export const navItems: NavData[] = [
     icon: 'fa fa-code-fork',
     children: [
       {
-        name: 'KPI in Verifica', 
-        url: '/coming-soon',
+        name: 'KPI in Verifica',
+        url: '/kpi',
         icon: 'fa fa-circle-thin'
       },
       {
@@ -81,6 +81,18 @@ export const navItems: NavData[] = [
     name: 'Catalogo',
     url: '/coming-soon',
     icon: 'icon-doc',
+    children: [
+      {
+        name: 'Catalogo KPI',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Catalogo Utenti',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
   },
   {
     name: 'Loading Form',
@@ -88,7 +100,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-edit',
     children: [
       {
-        name: 'Admin', 
+        name: 'Admin',
         url: '/loading-form/admin',
         icon: 'fa fa-circle-thin'
       },
