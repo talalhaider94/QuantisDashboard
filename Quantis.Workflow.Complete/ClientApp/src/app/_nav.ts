@@ -36,7 +36,7 @@ export const navItems: NavData[] = [
     icon: 'icon-speedometer',
     badge: {
       variant: 'info',
-      text: 'NEW'
+      text: ''
     }
   },
   {
@@ -81,6 +81,18 @@ export const navItems: NavData[] = [
     name: 'Catalogo',
     url: '/coming-soon',
     icon: 'icon-doc',
+    children: [
+      {
+        name: 'Catalogo KPI',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Catalogo Utenti',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      },
+    ]
   },
   {
     name: 'Loading Form',
