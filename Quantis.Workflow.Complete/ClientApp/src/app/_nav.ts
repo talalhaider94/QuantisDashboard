@@ -49,7 +49,7 @@ export const navItems: NavData[] = [
     icon: 'icon-home',
     children: [
       {
-        name: 'Contraenti', 
+        name: 'Contraenti',
         url: '/coming-soon',
         icon: 'fa fa-circle-thin'
       },
@@ -66,8 +66,8 @@ export const navItems: NavData[] = [
     icon: 'fa fa-code-fork',
     children: [
       {
-        name: 'KPI in Verifica', 
-        url: '/coming-soon',
+        name: 'KPI in Verifica',
+        url: '/kpi',
         icon: 'fa fa-circle-thin'
       },
       {
@@ -88,7 +88,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-edit',
     children: [
       {
-        name: 'Admin', 
+        name: 'Admin',
         url: '/loading-form/admin',
         icon: 'fa fa-circle-thin'
       },

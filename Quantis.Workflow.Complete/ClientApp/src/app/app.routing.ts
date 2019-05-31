@@ -9,6 +9,7 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { ForgetComponent } from './views/forget/forget.component';
+import { KPIComponent } from './views/workflow/kpi.component';
 
 export const routes: Routes = [
   {
@@ -69,6 +70,10 @@ export const routes: Routes = [
       {
         path: 'coming-soon',
         loadChildren: './views/comingsoon/comingsoon.module#ComingSoonModule'
+      },
+      {
+        path: 'kpi',
+        loadChildren: './views/workflow/kpi.module#KPIModule'
       },
       {
         path: 'loading-form',
