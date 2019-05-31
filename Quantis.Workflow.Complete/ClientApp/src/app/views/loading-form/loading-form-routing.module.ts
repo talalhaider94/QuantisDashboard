@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoadingFormComponent } from './loading-form.component';
+import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 
 const routes: Routes = [
     {
@@ -18,6 +19,13 @@ const routes: Routes = [
                 component: LoadingFormComponent,
                 data: {
                     title: 'Admin'
+                }
+            },
+            {
+                path: 'detail',
+                component: LoadingFormDetailComponent,
+                data: {
+                    title: 'Form Detail'
                 }
             },
         ],
