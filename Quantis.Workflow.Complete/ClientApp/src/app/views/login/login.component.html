@@ -33,6 +33,9 @@
                     <div class="col-6 text-right">
                       <a routerLink="/forget" class="btn btn-link px-0">Forgot password?</a>
                     </div>
+                    <div *ngIf="loading" class="col-12 text-center text-primary">
+                        <span  class="fa fa-spinner fa-spin fa-3x"></span>
+                    </div>
                   </div>
                 </form>
               </div>

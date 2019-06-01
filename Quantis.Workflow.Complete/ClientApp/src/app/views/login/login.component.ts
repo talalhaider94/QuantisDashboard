@@ -24,11 +24,9 @@ export class LoginComponent implements OnInit{
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService
   ) { 
+
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
-      console.log('LOGIN IF')
       this.router.navigate(['/dashboard']);
-    } else {
-      console.log('LOGIN ELSE')
     }
   }
   
@@ -39,10 +37,7 @@ export class LoginComponent implements OnInit{
         userName: ['', Validators.required],
         password: ['', [Validators.required, Validators.minLength(4)]]
     });
-    // get return url from route parameters
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/dashboard';
-    console.log('this.activatedRoute', this.activatedRoute.snapshot.queryParams);
-    console.log('this.returnUrl', this.returnUrl);
   }
 
   onLoginFormSubmit() {
@@ -52,13 +47,15 @@ export class LoginComponent implements OnInit{
         return;
     } else {
       const { userName, password } = this.f;
+      this.loading = true;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
-        console.log('onLoginFormSubmit: success', data);
         this.router.navigate([this.returnUrl]);
         this.toastr.success('You are loggedin successfully', 'Success');
+        this.loading = false;
       }, error => {
         console.log('onLoginFormSubmit: error', error);
         this.toastr.error(error.error.description, error.error.error);
+        this.loading = false;
       })
     }
     

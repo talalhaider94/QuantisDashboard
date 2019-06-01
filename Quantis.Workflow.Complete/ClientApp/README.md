@@ -4,3 +4,4 @@ Quantis Workflow Admin panel is build on top of CoreUI
 
 TODO's:
 1- Uninstall chart.js and ng2-charts. Since we might use another lib in future
+2- Add Spinner library ==> https://www.npmjs.com/package/ngx-ui-loader
