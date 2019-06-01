@@ -21,7 +21,13 @@ export class ForgetComponent implements OnInit{
     private authService: AuthService,
     private toastr: ToastrService,
     private router: Router
-    ) { }
+    ) { 
+
+      if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
+        this.router.navigate(['/dashboard']);
+      }
+      
+    }
   
   get f() { return this.forgetForm.controls; }
 
@@ -41,7 +47,6 @@ export class ForgetComponent implements OnInit{
       const { userName, email } = this.f;
       this.loading = true;
       this.authService.resetPassword(userName.value, email.value).pipe(first()).subscribe(result => {
-        console.log('onForgetFormSubmit', result)
         this.loading = false;
         if(!!result){
           this.router.navigate(['/login']);
