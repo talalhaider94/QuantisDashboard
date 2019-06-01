@@ -538,33 +538,21 @@ namespace Quantis.WorkFlow.APIBase.API
 
         }
 
-        private bool CallFormAdapter(FormAdapterDTO dto)
+        public string GetBSIServerURL()
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(_configuration.GetSection("FormAdapterHost").Get<string>());
-                var response = client.PostAsJsonAsync("api/FormAdapter/RunAdapter", dto).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    if (response.Content.ReadAsAsync<string>().Result == "2")
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        LogException(new Exception("Form Adapter returned with :"+response.ToString()), LogLevel.Error);
-                        return false;
-
-                    }
-                }
-                else
-                {
-                    LogException(new Exception("Connection to form adaptor cannot be created"),LogLevel.Error);
-                    return false;
-                }
-                    
+                var bsiconf = _dbcontext.Configurations.Single(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
+                return bsiconf.value;
             }
+            catch (Exception e)
+            {
+                LogException(e, LogLevel.Error);
+                throw e;
+            }
+
         }
+        
         public LoginResultDTO Login(string username,string password)
         {
             try
@@ -827,6 +815,34 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         #region privateFunctions
 
+        private bool CallFormAdapter(FormAdapterDTO dto)
+        {
+            using (var client = new HttpClient())
+            {
+                var con = GetBSIServerURL();
+                client.BaseAddress = new Uri(con);
+                var response = client.PostAsJsonAsync("api/FormAdapter/RunAdapter", dto).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.Content.ReadAsAsync<string>().Result == "2")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        LogException(new Exception("Form Adapter returned with :" + response.ToString()), LogLevel.Error);
+                        return false;
+
+                    }
+                }
+                else
+                {
+                    LogException(new Exception("Connection to form adaptor cannot be created"), LogLevel.Error);
+                    return false;
+                }
+
+            }
+        }
         private int getSessionTimeOut()
         {
             var session = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "session_timeout");

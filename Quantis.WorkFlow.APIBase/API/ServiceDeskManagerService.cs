@@ -26,7 +26,6 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly List<SDMGroupDTO> _groupMapping;
         private readonly List<KeyValuePair<string,string>> _statusMapping;
         private readonly IDataService _dataService;
-        private IConfiguration _configuration;
         private void LogIn()
         {
             try
@@ -71,7 +70,6 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IConfiguration configuration, ILogger<ServiceDeskManagerService> logger) : base(logger, context)
         {
-            _configuration = configuration;
             _groupMapping = new List<SDMGroupDTO>()
             {
                 new SDMGroupDTO("cnt:D3D5EE53E8F26A46B1B8DF358EC30065","IMEL_Referenti_OP","IM"),
@@ -529,7 +527,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var client = new HttpClient())
                 {
                     List<string> data = new List<string>() { dto.primary_contract_party, dto.secondary_contract_party, dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
-                    client.BaseAddress = new Uri(_configuration.GetSection("FormAdapterHost").Get<string>());
+                    client.BaseAddress = new Uri(_dataService.GetBSIServerURL());
                     var response = client.PostAsJsonAsync("api/UploadKPI/UploadKPI", data).Result;
                     if (response.IsSuccessStatusCode)
                     {

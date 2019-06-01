@@ -11,17 +11,21 @@ using System.Xml.Linq;
 using Quantis.WorkFlow.APIBase.Framework;
 using Microsoft.Extensions.Logging;
 using Quantis.WorkFlow.Services.DTOs.API;
+using System.Net.Http;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
     
     public class OracleDataService:BaseService<OracleDataService>, IOracleDataService
     {
-        private IConfiguration _configuration;
-        public OracleDataService(IConfiguration configuration, WorkFlowPostgreSqlContext context,
+        private static string _connectionstring=null;
+        public OracleDataService(WorkFlowPostgreSqlContext context,
             ILogger<OracleDataService> logger):base(logger, context)
         {
-            _configuration = configuration;
+            if (_connectionstring == null)
+            {
+                _connectionstring = getConnectionString();
+            }
         }
         public List<OracleCustomerDTO> GetCustomer(int id,string name)
         {
@@ -37,8 +41,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     query += " and c.customer_id = :customer_id";
                 }
 
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -104,8 +107,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_slas s on v.sla_id = s.SLA_ID left join ";
                 query += period_table;
                 query += " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'), to_char(time_stamp_utc, 'YY')) = :period where s.sla_name = :sla_name and r.rule_name = :rule_name and p.time_stamp_utc is not null";
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -169,8 +171,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 int day_cutoff = Int32.Parse(day_cutoffValue.value);
                 bool cutoff_result;
                 if(todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -264,8 +266,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     query += "and ug.user_group_id = :user_group_id";
                 }
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -319,8 +321,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     query += " and f.sla_id = :sla_id";
                 }
                 query += " group by f.sla_name,f.sla_id, f.sla_status, f.sla_valid_from, f.sla_valid_to, s.customer_name, s.customer_id, r.sla_version_id order by f.sla_id ASC";
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -396,8 +398,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     query += "and r.rule_id = :rule_id";
                 }
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -473,8 +475,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     query += " and user_id = :user_id";
                 }
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -522,8 +524,8 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 string query = @"SELECT USER_ID, USER_LOCALE_ID FROM T_Users Where USER_NAME = :user_name AND USER_STATUS = 'ACTIVE'";
-                var constr = _configuration.GetConnectionString("DataAccessOracleProvider");
-                using (OracleConnection con = new OracleConnection(constr))
+                
+                using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
                     {
@@ -547,6 +549,47 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogException(e, LogLevel.Error);
                 throw e;
             }
+        }
+        private string getConnectionString()
+        {
+            try
+            {
+                Dictionary<string, string> config = null;
+                var bsiconf = _dbcontext.Configurations.Single(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
+                var oracleconf = _dbcontext.Configurations.Single(o => o.owner == "be_oracle" && o.key == "con_str");
+                if (bsiconf == null || oracleconf == null)
+                {
+                    var e = new Exception("Configuration of BSI or Oracle does not exist");
+                    LogException(e, LogLevel.Error);
+                    throw e;
+                }
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(bsiconf.value);
+                    var response = client.GetAsync("/api/OracleCon/GetOracleConnection").Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        config = response.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+                    }
+                    else
+                    {
+                        var e = new Exception("Connection to retrieve Orcle credentials cannot be created");
+                        LogException(e, LogLevel.Error);
+                        throw e;
+                    }
+
+                }
+                string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
+                return finalconfig;
+            }
+            catch(Exception e)
+            {
+                LogException(e, LogLevel.Error);
+                throw e;
+            }
+            
+            
+
         }
     }
 }
