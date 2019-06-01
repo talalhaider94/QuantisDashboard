@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import * as sha256 from 'sha256';
 import {environment} from '../../environments/environment';
+import Headers from '../_helpers/headers';
 
 @Injectable({
   providedIn: 'root'
@@ -24,20 +25,11 @@ export class AuthService {
 
   login(username: string, password: string) {
     const hashedPassword: string = sha256('p4ssw0rd'+sha256(password));
-    // Danial TODO: move headers code into custom HTTP Interceptor class
-    let headerObject = new HttpHeaders().set('Content-Type', 'application/json');
-    headerObject = headerObject.append('Content-Type', 'application/json');
-    headerObject = headerObject.append("Authorization", "Basic " + btoa("Quantis:WorkflowAPI"));
-    headerObject = headerObject.append("Authorization-Type", "Preemptive");
-    headerObject = headerObject.append('Access-Control-Allow-Headers', 'Content-Type');
-    headerObject = headerObject.append('Access-Control-Allow-Methods', 'GET');
-    headerObject = headerObject.append('Access-Control-Allow-Origin', '*');
-
     // Danial TODO: move endpoint into separat constant file
     const loginEndPoint = `${environment.API_URL}/Data/Login?username=${username}&password=${hashedPassword}`;
-    return this.http.get<any>(loginEndPoint, {headers: headerObject})
+    // Danial TODO: move headers code into custom HTTP Interceptor class
+    return this.http.get<any>(loginEndPoint, Headers.setHeaders('GET'))
         .pipe(map(user => {
-          console.log('user ==>', user);
             if (!!user && user.token) {
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
@@ -59,4 +51,13 @@ export class AuthService {
   isLoggedIn(): boolean {
       return !!this.getUser();
   }
+
+  resetPassword(username,email): Observable<any> {
+    const resetPasswordEndPoint = `${environment.API_URL}/Data/ResetPassword?username=${username}&email=${email}`;
+    return this.http.get(resetPasswordEndPoint, Headers.setHeaders('GET'))
+    .pipe(map(data => {
+      return data;
+    }))
+  }
+
 }

@@ -26,7 +26,9 @@
                   <span class="text-danger mb-3" *ngIf="submitted && f.email.errors && f.email.errors.email">Email must be a valid email address</span>
                   <div class="row">
                     <div class="col-6">
-                      <button type="submit" class="btn btn-primary px-4">Submit</button>
+                      <button [disabled]="loading" type="submit" class="btn btn-primary px-4">
+                          <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Submit
+                      </button>
                     </div>
                   </div>
                 </form>
