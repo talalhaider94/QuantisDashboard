@@ -7,151 +7,43 @@
               <table class="table table-responsive-sm table-hover table-outline mb-0">
                 <thead class="thead-light">
                   <tr>
-                    <th class="text-center">ID Form</th>
-                    <th class="text-center">Nome Form</th>
-                    <th class="text-center">KPI Coinvolti</th>
-                    <th class="text-center">Gruppo / Utente</th>
+                      <th class="text-center">No.</th>
+                    <th class="text-center">Form ID</th>
+                    <th class="text-center">Form Name</th>
+                    <th class="text-center">Group Name</th>
+                    <th class="text-center">Cutoff</th>
+                    <th class="text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
+                  <tr *ngIf="loadingForms.length === 0 && !loading">
+                    <td colspan="6"><strong>No Loading Form found.</strong></td>
                   </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
+                  <tr *ngIf="loading" class="text-center">
+                      <td colspan="6">
+                          <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                      </td>
                   </tr>
-                  <tr (click)="clickrow()">
+                  <tr *ngFor="let loadingForm of loadingForms; let i = index">
                     <td>
-                      <div class="text-center">2112</div>
+                        <div class="text-center">{{ i+1 }}</div>
                     </td>
                     <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
+                      <div class="text-center">{{ loadingForm.form_id }}</div>
                     </td>
                     <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
+                      <div class="text-center">{{ loadingForm.form_name }}</div>
                     </td>
                     <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
+                      <div class="text-center">{{ loadingForm.user_group_name || 'N/A' }}</div>
                     </td>
                     <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
+                      <div class="text-center">{{ loadingForm.cutoff }}</div>
                     </td>
                     <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
-                    </td>
-                  </tr>
-                  <tr (click)="clickrow()">
-                    <td>
-                      <div class="text-center">2112</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN_Service Desk</div>
-                    </td>
-                    <td>
-                      <div class="text-center">IMSIN028 - IMSIN029</div>
-                    </td>
-                    <td>
-                      <div class="text-center">danial.munsif@quantis.it</div>
+                      <div class="text-center">
+                        <a [routerLink]="['/loading-form/form', loadingForm.form_id, loadingForm.form_name]" class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
+                      </div>
                     </td>
                   </tr>
                 </tbody>

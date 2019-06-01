@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, first } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as sha256 from 'sha256';
 import {environment} from '../../environments/environment';
 import Headers from '../_helpers/headers';
@@ -23,7 +23,7 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string): Observable<any> {
     const hashedPassword: string = sha256('p4ssw0rd'+sha256(password));
     // Danial TODO: move endpoint into separat constant file
     const loginEndPoint = `${environment.API_URL}/Data/Login?username=${username}&password=${hashedPassword}`;

@@ -22,7 +22,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'detail',
+                path: 'form/:formId/:formName',
                 component: LoadingFormDetailComponent,
                 data: {
                     title: 'Form Detail'
