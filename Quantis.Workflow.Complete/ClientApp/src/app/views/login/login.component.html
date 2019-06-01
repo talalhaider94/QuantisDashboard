@@ -28,13 +28,12 @@
                   <span class="text-danger mb-3" *ngIf="submitted && f.password.errors && f.password.errors.minlength">Password must be at least 4 characters</span>
                   <div class="row">
                     <div class="col-6">
-                      <button type="submit" class="btn btn-primary px-4">Login</button>
+                      <button [disabled]="loading" type="submit" class="btn btn-primary px-4">
+                        <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Login
+                      </button>
                     </div>
                     <div class="col-6 text-right">
                       <a routerLink="/forget" class="btn btn-link px-0">Forgot password?</a>
-                    </div>
-                    <div *ngIf="loading" class="col-12 text-center text-primary">
-                        <span  class="fa fa-spinner fa-spin fa-3x"></span>
                     </div>
                   </div>
                 </form>
