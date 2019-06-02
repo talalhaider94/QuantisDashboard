@@ -101,6 +101,11 @@ export const navItems: NavData[] = [
     children: [
       {
         name: 'Admin',
+        url: '/loading-form/admin2',
+        icon: 'fa fa-circle-thin'
+      },
+      {
+        name: 'Admin New',
         url: '/loading-form/admin',
         icon: 'fa fa-circle-thin'
       },
