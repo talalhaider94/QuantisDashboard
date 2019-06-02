@@ -1,20 +1,15 @@
 import { Component, OnInit,ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { FormGroup,  FormBuilder,  Validators,FormControl,FormArray } from '@angular/forms';
-// import { ApiServiceService } from '../api-service.service';
 import { DateAdapter } from '@angular/material';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 // import { json } from 'sequelize';
-import { ApiCloudService } from '../services/api-cloud.service';
 import { HttpClient, HttpRequest, HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { Subscription, of } from 'rxjs';
 import { tap, map, filter,last,catchError } from 'rxjs/operators';
-import { Form } from '../form';
-import { ApiFormService } from '../services/form/api-form.service';
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload';
-import { FormField } from '../classes/FormField';
-import { UserSubmitLoadingForm } from '../classes/UserSubmitLoadingForm';
-import { FormAttachments } from '../classes/Attachment';
+import { FormAttachments, FormField, UserSubmitLoadingForm, Form } from '../../../_models';
 import * as moment from 'moment';
+import { LoadingFormService } from '../../../_services';
 
 
 export class FormClass{
@@ -71,7 +66,8 @@ export class ProveVarieComponent implements OnInit {
 
   erroriArray:string[]=[];
 
-  jsonFiltri:json;
+  // jsonFiltri:json;
+  jsonFiltri;
   mappaFiltri:Map<string,any>;
   arraySecondo=new Array;
   confronti:string[]=['<','>','=','!=','>=','<='];
@@ -109,7 +105,12 @@ export class ProveVarieComponent implements OnInit {
   
   angForm: FormGroup;
   // private apiService:ApiServiceService
-  constructor(private http: HttpClient,private adapter: DateAdapter<any>, private apicloudService:ApiCloudService,private fb: FormBuilder,private apiFormService : ApiFormService) {}
+  constructor(
+    private http: HttpClient,
+    private adapter: DateAdapter<any>,
+    private fb: FormBuilder,
+    private loadingFormService: LoadingFormService,
+    ) {}
 
       initInputForm(){
         return this.fb.group({
@@ -156,7 +157,8 @@ export class ProveVarieComponent implements OnInit {
 
       save(model:any) {
         //elementi da mettere nel json
-        let jsonDaPassare:json;
+        // let jsonDaPassare:json;
+        let jsonDaPassare:any;
         //let mappaDaPassare:Map()= new Map();
         let arrayControlli = [];
         let confrontoAppoggio = new ControlloConfronto;
@@ -230,7 +232,7 @@ export class ProveVarieComponent implements OnInit {
         //formToSend.form_body = JSON.stringify(arrayControlli).substring(1,JSON.stringify(arrayControlli).length-1);
         formToSend.form_body = JSON.stringify(arrayControlli);
        console.log(formToSend);
-        this.apicloudService.createForm(formToSend).subscribe(data => {
+        this.loadingFormService.createForm(formToSend).subscribe(data => {
 
         });
 
@@ -309,7 +311,7 @@ export class ProveVarieComponent implements OnInit {
       userSubmit.empty_form = false;  
       userSubmit.period = String(periodRaw);    
       userSubmit.year =  Number(moment(dataAttuale).format('YY'));
-      this.apiFormService.submitForm(userSubmit).subscribe(data => {});
+      this.loadingFormService.submitForm(userSubmit).subscribe(data => {});
     }
 
     checkConfronto(val1,val2,segno,elemento1,elemento2){
@@ -383,7 +385,7 @@ export class ProveVarieComponent implements OnInit {
         //this.initComparisonForm(array)
       ])
     });
-    this.apiFormService.getKpiByFormId(numero).subscribe(data => {
+    this.loadingFormService.getKpiByFormId(numero).subscribe(data => {
       console.log('getKpiByFormId', data)
       data.forEach(element => {
         this.listaKpiPerForm.push(element);
@@ -393,7 +395,7 @@ export class ProveVarieComponent implements OnInit {
       console.log('getKpiByFormId', error)
     });
 
-    this.apiFormService.getFormFilterById(numero).subscribe(data => {
+    this.loadingFormService.getFormFilterById(numero).subscribe(data => {
       //this.jsonRicevuto = ;
       JSON.parse(data.form_body).forEach((element,index) => {
         console.log(element);
@@ -404,7 +406,7 @@ export class ProveVarieComponent implements OnInit {
           array.campo2=element.campo2;
           this.defaultFont[index]=array;
           this.addComparisonForm(array);
-          this.myInputForm.get('campiConfronto').controls[index].setValue(array);
+          // this.myInputForm.get('campiConfronto').controls[index].setValue(array);
         }else if(element.max!=null && element.max.length!=24){
           /*console.log(element.max);
           console.log(typeof element.max === "string");
@@ -436,7 +438,7 @@ export class ProveVarieComponent implements OnInit {
 
     setTimeout(() => this.mostraTabella = true, 700);
 
-    this.apiFormService.getFormById(numero).subscribe(data => {
+    this.loadingFormService.getFormById(numero).subscribe(data => {
       let jsonForm = data;
 
       this.arrayFormElements = jsonForm[0].reader_configuration.inputformatfield;
@@ -460,7 +462,7 @@ export class ProveVarieComponent implements OnInit {
 
     let userIdForForm = JSON.parse(localStorage.getItem('currentUser')).userid;
     if(this.isAdmin){
-      this.apiFormService.getForms().subscribe(data =>{
+      this.loadingFormService.getLoadingForms().subscribe(data =>{
         this.jsonForm = data;
         setTimeout(() => this.vai =true, 3000);
         setTimeout(() => this.dataSource.paginator = this.paginator,3000);
@@ -471,7 +473,7 @@ export class ProveVarieComponent implements OnInit {
       })
       
     }else{
-      this.apiFormService.getFormsByUserId(userIdForForm).subscribe(data => {
+      this.loadingFormService.getFormsByUserId(userIdForForm).subscribe(data => {
       this.jsonForm = data;
       setTimeout(() => this.vai =true, 3000);
       setTimeout(() => this.dataSource.paginator = this.paginator,3000);
@@ -504,22 +506,12 @@ export class ProveVarieComponent implements OnInit {
 
   filtraElementi(campo,indice:number){
     console.log(campo);
-   // this.arraySecondo[indice]=new;
    let arrayappoggio =    new Array(this.arrayFormElements);
-   // this.arraySecondo[indice]=new Array(this.arrayFormElements);
     console.log(this.arraySecondo);
     this.arraySecondo[indice] =  arrayappoggio.filter(
       elemento => (elemento.Type === campo.Type)&&(elemento.Name != campo.Name));
       console.log(this.arraySecondo);
   }
-
-  /*updateFormFilters(){
-    this.apiFormService.updateForm(this.jsonFiltri);
-  }*/
-
-
-
-
    
   fileData = null;
   fileProgress(fileInput: any) {

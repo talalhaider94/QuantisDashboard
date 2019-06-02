@@ -1,8 +1,13 @@
-// @import "../../styles-variables.scss";
+.bg-white {
+  padding: 10px;
+  margin-bottom: 15px;
+}
+.container_upload .btn{
+ margin-top: 10px;
+}
 .centrato {
   margin: auto;
   width: 60%;
-  //border: 3px solid $primaryColor ;
   padding: 10px;
 }
 
@@ -63,16 +68,6 @@ td, th {
   display: inline-block;
 }
 
-.btn {
-  border: 2px solid blue;
-  color: white;
-  background-color: blue;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .upload-btn-wrapper input[type=file] {
   font-size: 100px;
   position: absolute;
@@ -80,9 +75,6 @@ td, th {
   top: 0;
   opacity: 0;
 }
-
-
-
 
 .contenitore{
   width: 100%;

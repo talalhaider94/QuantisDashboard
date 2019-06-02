@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import Headers from '../_helpers/headers';
 import {environment} from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { UserSubmitLoadingForm } from '../_models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,28 @@ export class LoadingFormService {
     return this.http.get(getKpiByFormIdEndPoint, Headers.setHeaders('GET'));
   }
 
-  public getFormFilterById(form_id:number): Observable<any> {
+  getFormFilterById(form_id:number): Observable<any> {
     const getFormFilterByIdEndPoint = `${environment.API_URL}/Data/GetFormById/${form_id}`
     return this.http.get(getFormFilterByIdEndPoint, Headers.setHeaders('GET'));
   }
 
+  submitForm(formFields:UserSubmitLoadingForm){
+    const submitFormEndPoint = `${environment.API_URL}/Data/SubmitForm`;
+    return this.http.post(submitFormEndPoint,JSON.stringify(formFields),Headers.setHeaders('POST'));
+  }
+  
+  getFormById(form_id:number): Observable<any> {
+    const getFormByIdEndPoint = `${environment.API_URL}/Oracle/GetFormById/${form_id}`
+    return this.http.get(getFormByIdEndPoint,Headers.setHeaders('GET'));
+  }
+
+  getFormsByUserId(user_id:number): Observable<any> {
+    const formsByUserIdEndPoint = `${environment.API_URL}/oracle/GetFormsByUserId/${user_id}`
+    return this.http.get(formsByUserIdEndPoint,Headers.setHeaders('GET'));
+  }
+  
+  createForm(form): Observable<any> {
+    const createFormEndPoint = `${environment.API_URL}/Data/AddUpdateForm`;
+    return this.http.post(createFormEndPoint,form, Headers.setHeaders('POST'));
+  }
 }

@@ -90,13 +90,12 @@
 
       <form [formGroup]="myInputForm" novalidate (ngSubmit)="save(myInputForm)">
         <div formArrayName="valories">
+          <!-- Danial: loop over form fields -->
           <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
-     
-
-            <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body" [formGroupName]="i">
+            <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
               <div>
-                <div class="form-group col-xs-3" ></div>
-                <div  class="form-group col-xs-6">
+                <div  class="my-form col-sm-12">
+                  
                   <mat-form-field appearance="outline" >
                     <mat-label>{{arrayFormElements[i].name}}</mat-label>
                     <input matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"    formControlName="valoreUtente">
@@ -104,12 +103,11 @@
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
                 </div>
-                <div class="form-group col-xs-3" ></div>
               </div>
               <div>
-                <div class="form-group col-xs-3" ></div>
-                <div id="divDate" style="display: inline-table">
-                  <div  class="form-group col-xs-5">
+                <div class="my-form col-xs-3" ></div>
+                <div id="divDate" class="row">
+                  <div  class="my-form col-sm-6">
                     <mat-form-field appearance="outline">
                       <mat-label>min Date</mat-label>
                       <input matInput [(ngModel)]="minDate[i]" [matDatepicker]="pickerb" [max]="maxDate[i]" class="form-control"   formControlName="valoreMin" >
@@ -117,7 +115,7 @@
                       <mat-datepicker #pickerb></mat-datepicker>
                     </mat-form-field>
                   </div>
-                  <div  class="form-group col-xs-5">  
+                  <div  class="my-form col-sm-6">  
                     <mat-form-field appearance="outline">
                       <mat-label>max Date</mat-label>
                       <input matInput [(ngModel)]="maxDate[i]"  [min]="minDate[i]"  [matDatepicker]="pickera" class="form-control"   formControlName="valoreMax" >
@@ -126,40 +124,36 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="form-group col-xs-3" ></div>
+                <div class="my-form col-xs-3" ></div>
               </div>
             </div>
 
 
-            <div *ngIf="arrayFormElements[i].type!='time'" class="panel-body" [formGroupName]="i">
+            <div *ngIf="arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i">
               <div>
-                <div class="form-group col-xs-3" ></div>
-                <div class="form-group col-xs-6">
+                <div class="my-form col-sm-12">
                   <mat-form-field appearance="outline">
                     <mat-label>{{arrayFormElements[i].name}}</mat-label>
                     <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" matInput placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                     <input *ngIf="arrayFormElements[i].type!='string'" matInput [min]="numeroMin[i]" [max]="numeroMax[i]" [(ngModel)]="numero[i]" type="number" placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                   </mat-form-field>
                 </div>
-                <div class="form-group col-xs-3" ></div>
               </div>
               <div>
-                <div class="form-group col-xs-3" ></div>
-                <div style="display: inline-table">
-                  <div class="form-group col-xs-6">
+                <div class="row">
+                  <div class="my-form col-sm-6">
                     <mat-form-field  appearance="outline">
                       <mat-label>inserisci numero minimo</mat-label>
                       <input matInput [max]="numeroMax[i]" [(ngModel)]="numeroMin[i]" type="number" placeholder="inserisci numero minimo" class="form-control"   formControlName="valoreMin">
                     </mat-form-field>
                   </div>
-                  <div class="form-group col-xs-6">
+                  <div class="my-form col-sm-6">
                     <mat-form-field  appearance="outline">
                       <mat-label>inserisci numero massimo</mat-label>
                       <input matInput [min]="numeroMin[i]" [(ngModel)]="numeroMax[i]" type="number" placeholder="inserisci numero massimo" class="form-control"   formControlName="valoreMax">
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="form-group col-xs-3" ></div>
               </div>
             </div>
 
@@ -169,56 +163,11 @@
         <div *ngIf="erroriArray.length>0">
           <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
         </div>
-        <!-----###############################
-       <div class="row" style="display: contents">
-        <div formArrayName="campiConfronto" class="panel panel-default">
-            <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body" [formGroupName]="i" >
-
-              <div  class="form-group col-xs-3">
-                  <mat-form-field appearance="outline">
-                    <mat-select placeholder="campo 1"   formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
-                      <mat-option *ngFor="let element of arrayFormElements " [value]="element"  >{{element.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-              </div>
-             
-
-             
-              <div  class="form-group col-xs-3">
-                <mat-form-field appearance="outline">
-                  <mat-select placeholder="confronto"    formControlName="segno" disableRipple>
-                    <mat-option *ngFor="let element of confronti " [value]="element">{{element}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            
-              <div  class="form-group col-xs-3">
-                <mat-form-field appearance="outline">
-                  <mat-select    formControlName="campo2" disableRipple [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))" placeholder="campo 2">
-                      <mat-option *ngFor="let element of arraySecondo[i]" [value]="element" >{{element.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-
-              <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.controls.valories.controls.length > 1" (click)="removeComparisonForm(i)"></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="margin-20">
-          <a (click)="addComparisonForm()" style="cursor: pointer">
-            Add another Comparison +
-          </a>
-        </div>
-####################-->
-
-
-
 
         <div class="row" style="display: contents">
           <div formArrayName="campiConfronto" class="panel panel-default">
-              <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body" [formGroupName]="i" >
-                <div  class="form-group col-xs-3">
+              <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body bg-white" [formGroupName]="i" >
+                <div  class="my-form col-xs-3">
                     <mat-form-field appearance="outline">
                       <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
                         <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}</mat-option>
@@ -231,7 +180,7 @@
                
   
                
-                <div  class="form-group col-xs-3">
+                <div  class="my-form col-xs-3">
                   <mat-form-field appearance="outline">
                     <mat-select placeholder="confronto"    formControlName="segno" disableRipple>
                       <mat-option *ngFor="let element of confronti " [value]="element">{{element}}</mat-option>
@@ -239,7 +188,7 @@
                   </mat-form-field>
                 </div>
               
-                <div  class="form-group col-xs-3">
+                <div  class="my-form col-xs-3">
                   <mat-form-field appearance="outline">
                     <mat-select    formControlName="campo2" disableRipple [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))" placeholder="campo 2">
                         <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}</mat-option>  
@@ -258,30 +207,6 @@
               Add another Comparison +
             </a>
           </div>
-          <!--inserita data di cut off
-            <div>
-              <div class="form-group col-xs-3" ></div>
-              <div  class="form-group col-xs-6">
-                <mat-form-field appearance="outline" >
-                  <mat-label>Data validità della rule</mat-label>
-                  <input matInput [(ngModel)] ="dataValidita" [matDatepicker]="thisPicker" placeholder="inserisci data" class="form-control"   formControlName="valoreUtente">
-                  <mat-datepicker-toggle matSuffix [for]="thisPicker"></mat-datepicker-toggle>
-                  <mat-datepicker #thisPicker></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="form-group col-xs-3" ></div>
-            </div>
-            <div>
-              <div id="divDate" >             
-                  <label style="width:40%">data minima: </label>{{minDate[i]|date}}
-                  <label  style="width:40%">data massima: </label>{{maxDate[i]|date}}
-              </div>
-            </div>-->
-
-        <!--<button mat-button color="warn" (click)="onClick()">
-          <mat-icon>file_upload</mat-icon>
-          {{text}}
-        </button>-->
         <table>
           <tr>
             <td>
@@ -333,10 +258,10 @@
               <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
          
     
-                <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body" [formGroupName]="i">
+                <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
                   <div>
-                    <div class="form-group col-xs-3" ></div>
-                    <div  class="form-group col-xs-6">
+                    <div class="my-form col-xs-3" ></div>
+                    <div  class="my-form col-sm-6">
                       <mat-form-field appearance="outline" >
                         <mat-label>{{arrayFormElements[i].name}}</mat-label>
                         <input disabled matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"   formControlName="valoreUtente">
@@ -344,7 +269,7 @@
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
                     </div>
-                    <div class="form-group col-xs-3" ></div>
+                    <div class="my-form col-xs-3" ></div>
                   </div>
                   <div>
                     <div id="divDate" >             
@@ -355,17 +280,17 @@
                 </div>
     
     
-                <div *ngIf="arrayFormElements[i].type!='time'" class="panel-body" [formGroupName]="i" >
+                <div *ngIf="arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i" >
                   <div>
-                    <div class="form-group col-xs-3" ></div>
-                    <div class="form-group col-xs-6">
+                    <div class="my-form col-xs-3" ></div>
+                    <div class="my-form col-sm-6">
                       <mat-form-field appearance="outline" >
                         <mat-label>{{arrayFormElements[i].name}}</mat-label>
                         <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" matInput placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                         <input *ngIf="arrayFormElements[i].type!='string'" matInput [min]="numeroMin[i]" [max]="numeroMax[i]" [(ngModel)]="numero[i]" type="number" placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                       </mat-form-field>
                     </div>
-                    <div class="form-group col-xs-3" ></div>
+                    <div class="my-form col-xs-3" ></div>
                   </div>
                   <div>     
                     <div >                 
@@ -383,20 +308,10 @@
             </div>
     
             <br/>
-            <!--<div style="margin:0 auto">
-              <mat-checkbox class="example-margin" [(ngModel)]="checked" (onChange)="DatiNonPervenuti()" [value]='true'>Dati non pervenuti</mat-checkbox>
-            </div>-->
-            <div class="container_upload">
- 
-              <!--<div class="navbar navbar-default">
-                  <div class="navbar-header">
-                      <a class="navbar-brand" href>Angular2 File Upload</a>
-                  </div>
-              </div>-->
-           
+            <div class="container_upload bg-white">
               <div class="row">
            
-                  <div class="col-md-3">
+                  <div class="col-md-6">
            
                       <h3>Select files</h3>
            
@@ -407,15 +322,6 @@
                            class="well my-drop-zone">
                           Base drop zone
                       </div>
-           
- <!--                     <div ng2FileDrop
-                           [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
-                           (fileOver)="fileOverAnother($event)"
-                           [uploader]="uploader"
-                           class="well my-drop-zone">
-                          Another drop zone
-                      </div>-->
-           
                       Multiple
                       <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
                       <button (click)='cliccato()'></button>
@@ -423,7 +329,7 @@
                       <input type="file" ng2FileSelect [uploader]="uploader" />
                   </div>
            
-                  <div class="col-md-9" style="margin-bottom: 40px">
+                  <div class="col-md-12" style="margin-bottom: 40px">
            
                       <h3>Upload queue</h3>
                       <p>Queue length: {{ uploader?.queue?.length }}</p>
@@ -496,32 +402,6 @@
               </div>
            
           </div>
-            <!--<ul style="display:none">
-              <li *ngFor="let file of files" [@fadeInOut]="file.state">
-                    <mat-progress-bar [value]="file.progress" *ngIf="file.progress!=0 && file.progress!=100"></mat-progress-bar>
-                    <span id="file-label">
-                    {{file.data.name}} 
-                    <a title="Retry" (click)="retryFile(file)" *ngIf="file.canRetry">
-                    <mat-icon>refresh</mat-icon></a>
-                    <a title="Cancel" (click)="cancelFile(file)" *ngIf="file.canCancel">
-                    <mat-icon>cancel</mat-icon></a>
-                    </span>
-              </li>
-            </ul>
-            <input type="file" id="fileUpload" name="fileUpload" multiple="multiple"  accept="{{accept}}" style="display:none;"/>-->
-    
-    
-           <!--<table style="margin:8px;margin-bottom:20%">
-              <tr *ngFor="let file of files" style="margin-bottom:10px">
-                
-                <td><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxASEA8QEhAQFRIVDw8VGBcVFQ8PFRgVFRUXFhUSFRUYHiggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OFxAQGCslGh81Ny0tLys3LC4tLS0rMDctLTc3LSs3LSstNS0tLTItKysvKy8tKy0rLS0rKy8tLTUtLf/AABEIAOEA4QMBEQACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAAAQYCBQcEA//EAEUQAAECAwIICQkHBAIDAAAAAAEAAgMRMQQhBkFRYXGRkvAFBxIUFnLC0dITQ1JTVHSTobIVIjI0RIGxYnOiwSQzF2Tx/8QAGgEBAAIDAQAAAAAAAAAAAAAAAAMFAgQGAf/EADERAQABAQYEBQUAAwADAQAAAAABAgMEERMxURIVUqEFQZHB0RQhM3GBU2HhMkLwIv/aAAwDAQACEQMRAD8A7egTxBAJxBAJxY0AmWlAJlpQJyqgTxlABxlABx4kAGehAnPQgTxBAJxBAJxCqATLSgEy0oE5VQJ4ygA4ygA48SADPQgAz0IE8iATiCATiFUAnWgmaAgg5EEZggUuFd7yg8vCnCEOzwnRX0GLG4mgC8qqiIxlNYWFVtXFFOsud2/Cy1xHEiJ5MTuawD5uN53uWtNpVLpbLwy72cfeOKf9/DydILZ7TF1rHjq3TfQ3fog6QWz2mLrTjq3Pobv0Qfb9s9pi6046tz6G79EHSC2e0xdacdW59Dd+iDpBbPaYutOOrc+hu8/+kHSC2e0xdacdW59Fd+iDpBbPaYutOOrc+iu/RB0gtntMXWnHVufRXfog6QWz2mLrTjq3Porv/jg6QWz2mLrTjq3Pobv0QdILZ7TF1px1bn0N36IPt+2e0xdacdW59Dd+iEwsMLXAiQ4jojorOVJzHGrTWRxOyFZ0Vzi1r1cLGqjCmmIneHTeCeEoVphNjwnBzDracbXDE4ZFsROLm7Szqs6ppqj7vXW803vXqMro/lAroQK3DfMgZggUuG+dApdj3vQKZygkCV5rvcglBBOIIIpcK73lAppQU3jIeQyzNncXxHHS0AD6ioLbyXfgsRxVz5/b/wC7KMoHQCH+5EBAQ1ENRAQEBDQQ0EBD9vBwt+FvW/0sqUNtpD64MYQxbFF5bfvQ3EcuGTIOGUZHDEVLTVgr7xd6benCdfKXauCuEoVqhNjQnThn9iDja4YiMimicXPWlnVZ1TTVq9ddC9RlbhvmQMwQKXDfOgUuxoFM5KBS813uCCQMZQSggnEKoIppQKaUFL4yaWWeWN2FBbeS98E1tP57qQoF9/uRAQENRDUQEBAQ0ENBAQEHg4W/C3rf6WVKG20hq1m125wYwhi2KLy2TdDdIRIc5BwyjI4YisqasGveLvTb04Tr5S7VwVwnCtMJsWC6bHDQQcbCMTgponFz1pZ1WdU01avXmC9RlLhvnQKXY970CmclApea73BAzlBIGMoJmggmWlBFNKBS813uCCl8ZNLKTljdhQW3kvfBNbT+e6kKBfCAhqIaiAgICGghoICAgIPBwt+FvW/0sqUNt94hrFm1xBuMGMIotii8tl8N0hEZO5wyjI4YisqasGveLvTbU4Tr5S7VwVwnCtEJkWC7lNdrBxtcMThkU0Ti561s6rOqaao+710ux73r1GUzkoFLzXe4IGcoGcoJF9+JBlNBiTLSgil5rvcEDOUFL4yaWUnLG7CgtvJe+Ca2n891IUC+ENRDUQEBAQ0ENBAQEBAQ1eDhb8Let/pZUobbSGsWbXEEINzgxhFFsUXls+8x0uXDJucMoyOGIrKmrBr3i7021OE6+Uu1cE8JwbRCbGhO5TXfsQcbXDERkU0Ti561sqrOqaao+710vNd7gvUZnKBnKBW803vQSL9H8oMkGJuvQRnKBnKCl8ZN4sumN2FBbeS98E1tP57qQoF9qIaiAh/qEcoZQj3A5QyhDA5QyhDDA5QyhDA5QyhDCQFHmHnKUBDUQ1eDhb8Let/pZUobbSGsWbXQglAQbjBfCKLYovLZ95jpB8OdzhlGRwxFZU1YNe8Xem2pwnXyl2rgnhKFaITY8J3Ka7W042OGJwU0Ti560sqrOqaao+715yvUZW803vQK6P5QTOehBkgxOUoIzlArfi3vQUvjJMxZck43YUFt5L3wTW0/nupCgX2ogIN5gbZYcS1BrwDKG5zQbwXAioxyBJlmUllETV91d4pa12dh/wDjznCf06N5NouDRPQFtuW4p3PJtGIE6Ajzinc8m0XkCegaghxTueTbUgaghxTueTFSBqCHFO75Wmxw4rS2IxpYQbiAP3ni0ryYidWdna10VRVTM4uSRAOU4AzaCZHKJ3FaLt6ZmYiZYo91EHwtsHlsIFReF7E4MLSnijCGkcJXY1I1NPsICAgINxgxhDFsUXlt+9DMuXDJucMoyOGIrKmrBr3i7021OE6+Uu1cFcJQrTCbHhO5TD+xBFWuGIjIponFz1pZ1WdU01R93rro/leoyuhBM8QpvcgmSCCMZQRW/EgV0fygpfGSZiy6Y3YUFt5L3wTW0/nupCgXwgIMoURzSHNJDgZggkEHKCExeVUxMcMxjEtkMIrYP1D9TO5Z5lW7U5fduiO50jtlecP1M7kzKtzl926I7nSO2V5w/UzuTMq3OX3bojudI7Z7Q/UzuTMq3OX3bojudI7Z7Q/UzuTMq3OX3boju+dp4ctURpY+O8tNRc2eYyFMy8muqdZZUXK70VcVNEYw16xbWogICD5xILTVoJ3xpi8mmJ8nniWeHiaPmvcZY5dMeTDm7PRHzTGTLp2Obs9EfNMZMunY5uz0R80xky6djm7PRHzTGTLp2XLiwErRGYJhpgcoiZkSHtAJGWROtS2MziqPGKKYsqaoj74+zpFdC2HPFbhTe5BM8QQTJBBGWiCK6P5QK6EFL4yaWWWWN2FBbeS98E1tP57qQoF8ICGghoICAgICGohqICAgIMXukM6GjzoCAgICGq3cWonaovu7vrYpbHVUeM/hp/ftLo9bhTe5bLmzMEE0uCCUEET0IIroQMwQUvjJpZQMsbsKC28l74Jrafz3UhQL4Q0ENHq4NsD48QQ2S5RmZm4ACpObvXtNM1ThCG3t6LCia61k6CvlM2hmw7vU2RO6q53R0T6gwFfU2hmw7vTInc53R0T6gwFfXnDNh3emRO5zujon1/4DAV5/UMl1Hd6ZE7nO6eifX/gMBXn9QyXUd3pkTuc7p6J9f+HQZ9OcM2Hd6ZE7nO6eifU6CvoLQzYd3pkTuc7p6J9Q4Cvpzhmw7vTInc53R/jn1DgK8fqGT6ju9MidzndH+OfX/gcBXj9QyfUd3pkTuc7o6J9f+PnEwCiV5yzYd4kyJ3Od0dE+v/Ef+P4lTaWbDvEmRO5zujon1/4rvDnA0WyvDIkiHAlrhORAroIuuzhRV0TTOErK63qi8U8VPlrGzXLFsiGohqt3Fr+ai+7u+tilsdVR4z+Gn9+0uj5gtlzZmCCRddj3vQZIMTfoQRmG+ZAzBBS+Mm4WUDLG7CgtvJe+Ca2n891IUC+0ENBBtMG+FBZo4iOaS0sLHSqASDMZ5gLOzq4Zxad+u03iy4Yn7x94XQYW2KpiO0ciJ3LYzaFByq89MesHS2xGsR0upE7kzaDlV66e8BwtsR846XUiX/JM2jc5VeunvAcLbGfOOl1IncmbQcqvPT3gOFtjoIjtiJ3Jm0HKrz094DhbYqCI7YidyZtByq89PeDpbYhcIjtiJ3Jm0HKrz094OltiFIjp9SJ3Jm0HKrz094BhbYh5xxPUidyZtByq89PeGJwvsQvMV0/7cTuTNoOVXnp7wgYY2Gpiu+HF7kzaNzlV66e8AwxsNTFd8OL3Jm0bnKr1094VDDDh1lqiQ/Jg+Thh0iRIuLpTMsQ+6FBa18U/ZdeG3Oq70zNes+yvqNY6iGogt3Fr+ai+7u+tilsdVR4z+Gn9+0uj5gtlzZS4V3vQSLtJQSgg5EEZggUuFd70FL4yRIWXTG7CgtvJe+Ca2n891IUC+0EBAQEBDUQ1EBAQENBDRBuQedxmZoIQEBDUQ1EBBbuLX81Fl7O762KWx1VHjP4af37S6PS4V3vWy5spnJQSBK81QSggnEEEUuFd70CmlBS+MkSFlyzjdhQW3kvfBNbT+e6kKBfCAgIImhhiTQ1JoE0CaBMIEwhhgTCGD5Rnik0MHymMqPcCYQwJjKhhilHmogICC3cWv5qL7u762KWx1VHjP4af37S6PTOStlzZS813uQSBjKCUEE4hVBFNKBTSUFL4yaWWeWN2FBbeS98E1tP57qQoF8ICDeYHWKHGtPJiAFrYbnBpo5wIABGMXkyzKSyiJq+6u8Ttq7Owxo+2M4Yuh82hm4Q2S6rdQuW3hDl8yvqn1DZ4ZuENmy3VRMIMyvqkNmh0ENmy1MIMyvqk5tDoIbNlvcmEGZX1Sc2hi7ybJ9VuuiYQZlfVJzaGPNsJ6re5MIMyvqk5tDF5YyfVbqFyYQZlfVILNDqWM2W9yYQZlfVJzWHUw4ey3uTCDMr3kFlhm8w2S6rddEwgzK95Oawz5tkuq2/5JhBmV7yc1hnzbJdVvcmEGZXvKg8YFhgw4sF0NrWl7X8oNAA+6RJ0hQmZ1LWtqYiYwdF4RbWlpRVTVOMRhhKqKFbiAgt3Fqf+VF93d9bFLY6qjxn8NP79pdHpea73LZc2ZygkDGUEzQQTLSgimkoFLzXe4IKXxk0spOWN2FBbeS98E1tP57qQoF8ICGrODFc1wcxxa4GYIMj+yRODGqmK4mmqMYltOk9tp5c7MLwqTNr3afLbr0d5+TpPbaCOdmF4Uza9zlt16O8/IMJ7bQRzsw/CmbXuctuvR3n5BhPbR587MPuTNr3OW3Xo7z8nSe2+vOzC8KZte5y269Hefk6T22vlzsw/CmbXuctuvR3n5Ok9tr5c7MLwpm17nLbr0d5+XyiYV22f/ebv6YXhTNr3OW3Xo7z8sThXbvaDswvCmbXuctuvR3n5DhXbj+oOzC8KZte5y269HefkOFduP6g7MLwpm17nLbr0d5+TpXbvaDsQvCmbXuctuvR3n5au12uJFeXxHuc4yEzkyDIMywmZn7y27Ozos6eGiMIfFeMxAQ0W7i1MrVF93d9bFLY6qjxn8NP79pdHzlbLmzOUEi+9BM0EEy0oIpea73BAzlBS+MmllJyxuwoLbyXvgmtp/PdSFAvhDUQ1EBAQEBDQQEGMR0gg86AhqIaiAgICAhoILdxaH/lRT/67vrYpbHVUeM/hp/ftLo+crZc2VvNN70Ei/QgyQYm69BGcoGcoKXxk3iy6Y3YUFt5L3wTW0/nupCgX2ohqIPTwdYYkeI2FDALjOtwAFXE5F7TTNU4Qit7eixomurSFh6DxqeWhT0PUuRO6r51Z9E9knAeKPPQp6HpkTu851Z9E9g4DRR56FqemRO5zqz6J7BwGijz0LU9MidznVn0T2Og0WpjwtT0yJ3OdWfRPY6DRqmNC1PTInc51Z9E9nzdgHGN/l4UtD0yJ3OdWfRPZiMAYx8/C1PTInc51Z9E9gYAxj5+FqemRO5zqz6J7AwBjevhanpkTuc6s+iex0BjU8vC1PTInc51Z9E9joDGp5eFqemRO5zqz6J7NBw1wPFssQQ4kjMTa5pJa4Zs+ZR1UTTP3WV2vVneKOKj+tesWxoICC3cWn5qKT7O762KWx1VHjP4af37S6PW803vWy5sroQTOehBkgxOUoIzlAreab3oKXxkmYsuScbsKC28l74Jrafz3UhQL7UQEG1wZ4UbZo/LcCWuYWOleQCQeUBjvAWdnVwzi0r/dpvFlwU6x912GFViAujX9SL8/urZzaN3P8svXR3j5BhTYh56Z6kXwpm0bnLL10d4+QYU2IX+Wv6kXV+FM2jc5ZeujvHyDCmxVMb/CL4UzaNzll66O8fIMKbFUxv8ACL4UzaNzll66O8fLE4WWHHG/bkRdf4UzaNzll66O8fKDhbYT5+7qRfCmbRucsvXR3j5ScLrCfP3dSL4UzaNzll66O8fIcLrDTy93Ui+FM2jc5ZeujvHyHC6w0Ef/AAi+FM2jc5ZeujvHydLrDQRv8IvhTNo3OWXro7x8nS2wike/qRfCmbRucsvXR3j5U3DLhuHaXwxDmWQw/wC8RyS4ulOQN4A5I+agta4qn7Lvw26VXeiqa9avL9K8olkICC3cWn5qL7u762KWx1VHjP4af37S6PXQtlzZXR/KCZ4hTe5BlJBiRjKCK3mm96BXR/KCl8ZJmLLknG7CgtvJe+Ca2n891IUC+EBAQ0ENBAQEEE40HncZmaGqENRAQEBAQ0EBAQEFu4tBO1Rfd3fWxS2Oqo8Z/DT+/aXR66P5Wy5srcKb3IJniCCZIIIy0QRXR/KBXQgpfGSbrLLLG7CgtvJe+Ca2n891IUC+EBAQ0QgICAg+UZ+JDV85oak0CaBNAmgTQ0JoCAgICGq3cWonaovu7vrYpbHVUeM/hp/ftLo9bhTe5bLmzMEE5gglBBE9CCK6ECtw3zIKXxk0soGWN2FBbeS98E1tP57qQoF8ICGjdYIWGHFtMooBDYbnBuJxBAAOUXzlmUllTE1fdX+JW1djYY0azOGOzoI4PgC8wYOwzVRbXDGzmM+1659ZSOD4NTBg7DO5OGNjPteufWQcHwTeYMKXUZronDGxn2vXPrKPs+CfMwpdRl/yThjYz7Xrn1k+zoB8xBl/bh3/ACThjYz7Xrn1kPB0A3CBB+HD1UThjYz7Xrn1kPB8CggQfhw+5OGNjPteufWQ8HQKCBB+HD7k4Y2M+1659ZPs6ALvIQZ/24euicMbGfa9c+sn2dAHmIJP9uH3JwxsZ9r1z6yfZ0AXmBBn/bh6hcnDGxn2vXPrJ9nQBeYMH4cPuThjYz7Xrn1lRMPeDYUKJBfDa1hiNfymtuH3S2TgMU+UdWla9tTETGDofCbxaWtFUVzjw4YT+1VUK2ENRDVbuLX81F93d9bFLY6qjxn8NP79pdHzBbLmzMEE0ux73oJQQRPQgitw3zIGYIKXxk0soGWN2FBbeS98E1tP57qQoF8IaCD6WeO+G5sRji1zTMEXEJE4aMa6Ka6ZprjGJbbpXbccYbELwqTNr3aXK7r0d5+TpXbfXDYheFM2rd5yu69PefkOFdtPnhsQvCmbXucruvT3n5fKJhfbqCMJf24PhTNr3OV3Xp7z8sel9u9cPhwfCmbXucruvT3n5Ol9up5YfDg+FM2vc5XdenvPyDC+3euHw4PhTNr3OV3Xp7z8gwvt3rh8OD4Uza9zld16e8/IML7d64fDg+FM2vc5XdenvPydL7d64fDg+FM2vc5XdenvPydL7dXyw+HB8KZte5yu69Pefk6X26vlh8OD4Uza9zld16e8/LVW62xYzzEivL3SlMyF2QAXAZgsJqmdW5ZWNFlTw0RhDzrxJqIaiC3cWv5qL7u762KWx1VHjP4af37S6PmC2XNlLhXe8oJF2koJQQciCMwQKXDfOgpfGSJCy6Y3YUFt5L3wTW0/nupCgX2ggICAgIasIjrkNXwQEBAQENBAQEBAQ1ENRAQW7i1/NRZezu+tilsdVR4z+Gn9+0uj0uFd7ytlzZTOSgkXaUEoIJxBBFLhvnQKXY970FL4yRIWXLON2FBbeS98E1tP57qQoF8ICAgIaiGrzvdMoMUBAQENBAQEBAQ1ENRAQEFu4tfzUX3d31sUtjqqPGfw0/v2l0emclbLmyl+Pe5BIGM1QSggnEKoIpdj3vQKZyUFM4yGHk2Z39UUfuQ2Q+RUFt5LzwWYxtP57qOoF+ICAhqIavnGdiQfFAQEBDQQEBAQENRDUQEBAQW/i0B5zGMvMEfuXtl/B1KWx1VHjOEWNMf79nRqX497lsubKXlBIGMoMkGJOtBFNJQKXmu9wQa/h3gptpguhuMjMFpryXChz1IOlY1U8UYNm6XmbvaRXH9/Tmdv4FtMFxESE/S0F7TnDh/9WrNEw6mxvdjaxjTVH60l5ObRPVv2XdyxwlNmUbwc2ierfsu7kwkzKJ84ObxPVv2XdyYSZlE+cHN4nq37Lu5MJMyjeHnfZ4k/+t+y7uTCXuZT5TCObv8AQfsuTA46d4Obv9B+y5MDjp3g5u/0H7LkwOOmPODm7/QfsuTA46d4Obv9B+y5MDjp3g5u/wBB+y5MDjp3g5u/0H7LkwOOneDm7/QfsuTA46Z84Obv9B+y5MDjpnzg5u/0H7LkwOOneDm7/QfsuTA46d4Obv8AQfsuTA46d4Obv9B+y5MDjp3h97JwXaIrg2HBiOJ/pIH7uNw/cr2KZnRHaXiys4xqqh07BTgEWOEeUQ6K8gvIpdRjcwmdZW1RRww5i/Xz6ivGP/GNG7ped8yzaJnKCRfeUEzQCggCV5rvcgAYygAYygC+9AroQDfoQDkQDkCAcgQKaUCmcoAu0oAylAGUoAyoFdCAb9CAciAcgQDkCBSlUCmcoAu0oAGM1QAMZQJTvO+dAroQZIIQEBAKCSgICCAgBAQSghAQEAoBQSgIAQQEBAQEBAQSggoJQQg//9k=" style="width:20px; height:20px"></td>
-                <td>{{file.data.name}}</td>
-                <td style="width: 5%"><a title="Cancel" (click)="cancelFile(file)">
-                    <mat-icon>cancel</mat-icon></a></td>
-                <td style="width: 5%"><a title="Retry" (click)="cancelFile1(file)">
-                    <mat-icon>refresh</mat-icon></a></td>
-              </tr>
-            </table>-->
             <table style="margin-bottom:15px">
               <tr style="border-style:1px black">
                   <th>Nome Contratto</th>
@@ -538,7 +418,7 @@
             <table>
               <tr>
                 <td>
-                    <button mat-button  class="btn btn-secondary pull-left"    (click)="onClick()">
+                    <button mat-button  class="btn btn-primary pull-left"    (click)="onClick()">
                         <mat-icon>file_upload</mat-icon>
                         carica file
                       </button>
@@ -546,7 +426,7 @@
                 <td>
     
               <div class="margin-20">
-                  <button type="submit" class="btn btn-secondary pull-right" [disabled]="!myInputForm.valid">Submit</button>
+                  <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">Submit</button>
                 </div>
                 <div class="clearfix"></div>
             </td>
