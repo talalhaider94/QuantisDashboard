@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoadingFormComponent } from './loading-form.component';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
-
+import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 const routes: Routes = [
     {
         path: '',
@@ -26,6 +26,13 @@ const routes: Routes = [
                 component: LoadingFormDetailComponent,
                 data: {
                     title: 'Form Detail'
+                }
+            },
+            {
+                path: 'admin2',
+                component: ProveVarieComponent,
+                data: {
+                    title: 'Admin 2'
                 }
             },
         ],
