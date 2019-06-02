@@ -12,6 +12,3 @@
 /Quantis.WorkFlow.UnitTest/bin
 /Quantis.WorkFlow.UnitTest/obj
 .vs
-/Quantis.WorkFlow.Complete/ClientApp/node_modules
-/Quantis.WorkFlow.Complete/ClientApp/dist
-/Quantis.WorkFlow.Complete/ClientApp/package-lock.json
