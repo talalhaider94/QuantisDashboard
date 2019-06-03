@@ -26,7 +26,7 @@ export class LoadingFormService {
     const getFormFilterByIdEndPoint = `${environment.API_URL}/Data/GetFormById/${form_id}`
     return this.http.get(getFormFilterByIdEndPoint, Headers.setHeaders('GET'));
   }
-
+  // form submitted by User from Loading form
   submitForm(formFields:UserSubmitLoadingForm){
     const submitFormEndPoint = `${environment.API_URL}/Data/SubmitForm`;
     return this.http.post(submitFormEndPoint,JSON.stringify(formFields),Headers.setHeaders('POST'));
@@ -41,7 +41,7 @@ export class LoadingFormService {
     const formsByUserIdEndPoint = `${environment.API_URL}/oracle/GetFormsByUserId/${user_id}`
     return this.http.get(formsByUserIdEndPoint,Headers.setHeaders('GET'));
   }
-  
+  // form submitted by Admin from Loading form
   createForm(form): Observable<any> {
     const createFormEndPoint = `${environment.API_URL}/Data/AddUpdateForm`;
     return this.http.post(createFormEndPoint,form, Headers.setHeaders('POST'));

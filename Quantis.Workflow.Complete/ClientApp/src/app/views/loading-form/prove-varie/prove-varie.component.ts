@@ -1,35 +1,33 @@
 import { Component, OnInit,ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { FormGroup,  FormBuilder,  Validators,FormControl,FormArray } from '@angular/forms';
-import { DateAdapter } from '@angular/material';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-// import { json } from 'sequelize';
 import { HttpClient, HttpRequest, HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { Subscription, of } from 'rxjs';
-import { tap, map, filter,last,catchError } from 'rxjs/operators';
-import { FileUploader, FileSelectDirective } from 'ng2-file-upload';
-import { FormAttachments, FormField, UserSubmitLoadingForm, Form } from '../../../_models';
+import { of } from 'rxjs';
+import { tap, map,last,catchError } from 'rxjs/operators';
+import { FileUploader } from 'ng2-file-upload';
+import { FormAttachments,FormField, UserSubmitLoadingForm, Form, FileUploadModel } from '../../../_models';
 import * as moment from 'moment';
 import { LoadingFormService } from '../../../_services';
-
+import { ToastrService } from 'ngx-toastr';
 
 export class FormClass{
   form_id:number;
   // form_body: json;
-  form_body;
+  form_body: any;
 }
-
+// means field control
 export class ControlloCampo{
   min:any;
   max:any;
 }
-
+// means comparison check
 export class ControlloConfronto{
     campo1:any='';
     segno:string='';
     campo2:any='';
   }
 
-  const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
+const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
 @Component({
   selector: 'app-prove-varie',
@@ -86,92 +84,91 @@ export class ProveVarieComponent implements OnInit {
   checked:boolean;
 
 
-/** Link text */
-@Input() text = 'Upload';
-/** Name used in form which will be sent in HTTP request. */
-@Input() param = 'file';
-/** Target URL for file uploading. */
-@Input() target = 'https://file.io';
-/** File extension that accepted, same as 'accept' of <input type="file" />. 
-    By the default, it's set to 'image/*'. */
-@Input() accept = 'image/*';
-/** Allow you to add handler after its completion. Bubble up response text from remote. */
-@Output() complete = new EventEmitter<string>();
+  /** Link text */
+  @Input() text = 'Upload';
+  /** Name used in form which will be sent in HTTP request. */
+  @Input() param = 'file';
+  /** Target URL for file uploading. */
+  @Input() target = 'https://file.io';
+  /** File extension that accepted, same as 'accept' of <input type="file" />. 
+      By the default, it's set to 'image/*'. */
+  @Input() accept = 'image/*';
+  /** Allow you to add handler after its completion. Bubble up response text from remote. */
+  @Output() complete = new EventEmitter<string>();
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("filtro") filtro: ElementRef;
-  
+
   angForm: FormGroup;
-  // private apiService:ApiServiceService
   constructor(
     private http: HttpClient,
-    private adapter: DateAdapter<any>,
     private fb: FormBuilder,
     private loadingFormService: LoadingFormService,
+    private toastr: ToastrService
     ) {}
 
-      initInputForm(){
-        return this.fb.group({
-          valoreUtente:[''],
-          valoreMin:[''],
-          valoreMax:['']
-        })   
-      }
+  initInputForm(){
+    return this.fb.group({
+      valoreUtente:[''], // user value
+      valoreMin:[''], // min value
+      valoreMax:[''] // max value
+    })   
+  }
 
-      addInputForm() {
-        const control = <FormArray>this.myInputForm.controls['valories'];
-        control.push(this.initInputForm());
-      }
+  addInputForm() {
+    console.log('addInputForm this.myInputForm 1', this.myInputForm);
+    const control = <FormArray>this.myInputForm.controls['valories'];
+    control.push(this.initInputForm());
+    console.log('addInputForm this.myInputForm 2', this.myInputForm);
+    console.log('addInputForm control 3', control);
+  }
 
-      /*initComparisonForm(){
-        return this.fb.group({
-          campo1:[''],
-          segno:[''],
-          campo2:['']
-        })
-      }*/
+  initComparisonForm(array){
+    return this.fb.group({
+      campo1:[{value: array.campo1, disabled: false}], // means field
+      segno:[{value: array.segno, disabled: false}],
+      campo2:[{value: array.campo2, disabled: false}]
+    })
+  }
 
-      initComparisonForm(array){
-        return this.fb.group({
-          campo1:[{value: array.campo1, disabled: false}],
-          segno:[{value: array.segno, disabled: false}],
-          campo2:[{value: array.campo2, disabled: false}]
-        })
-      }
+  addComparisonForm(array){
+    if(array==''){
+      array = new ControlloConfronto;
+    }
+    const control = <FormArray>this.myInputForm.controls['campiConfronto']; // means comparison fields
+    control.push(this.initComparisonForm(array));
+  }
 
-      addComparisonForm(array){
-        if(array==''){
-          array = new ControlloConfronto;
-        }
-        const control = <FormArray>this.myInputForm.controls['campiConfronto'];
-        control.push(this.initComparisonForm(array));
-      }
-
-      removeComparisonForm(i: number) {
-        const control = <FormArray>this.myInputForm.controls['campiConfronto'];
-        control.removeAt(i);
-      }
+  removeComparisonForm(i: number) {
+    const control = <FormArray>this.myInputForm.controls['campiConfronto'];
+    control.removeAt(i);
+  }
 
 
       save(model:any) {
+        console.log('ADMIN FORM SAVE MODEL', model);
         //elementi da mettere nel json
+        // items to put in the json
         // let jsonDaPassare:json;
-        let jsonDaPassare:any;
-        //let mappaDaPassare:Map()= new Map();
-        let arrayControlli = [];
+        let jsonDaPassare:any; // means json to pass
+        let arrayControlli = []; // controls array
+        // confrontoAppoggio = means comparison support || ControlloConfronto = means comparison check
         let confrontoAppoggio = new ControlloConfronto;
-        let controlloCampo = new ControlloCampo;
+        let controlloCampo = new ControlloCampo; //means fields control
 
         this.erroriArray=[];
-        let indiceAppoggio; 
-        let tipo1;
-        let valore1;
+        let indiceAppoggio; // mean index support 
+        let tipo1; // means guy or tip :/
+        let valore1; // means value
         let valore2;
+        // datiModelConfronto means  DataModel Comparison
+        // campiConfronto means comparison fields
         let datiModelConfronto = model.value.campiConfronto;
 
         datiModelConfronto.forEach((element,index) => {
+          console.log('why here....')
           if(element.campo1!=null && element.segno!=null && element.campo2!=null){
             confrontoAppoggio=new ControlloConfronto;
             confrontoAppoggio.campo1 = element.campo1;
@@ -181,7 +178,6 @@ export class ProveVarieComponent implements OnInit {
             tipo1=element.campo1.Type;
             indiceAppoggio=this.arrayFormElements.findIndex(x => x.name == element.campo1.Name);
             console.log(this.arrayFormElements);
-            //console.log(datiModelConfronto);
             switch (tipo1){
               case 'string':
               valore1 = this.stringa[indiceAppoggio];
@@ -205,9 +201,12 @@ export class ProveVarieComponent implements OnInit {
           
         });
         if(this.erroriArray.length>0){
+          this.toastr.error('Please fill the form correctly.', 'Error');
           return;
         }else{
+          console.log('NO ERRORS IN FORMS');
           this.arrayFormElements.forEach((element,index) => {
+            console.log('arrayFormElements :', element);
             controlloCampo = new ControlloCampo;
             if(element.type=='time'){
               controlloCampo.max = this.maxDate[index];
@@ -218,22 +217,20 @@ export class ProveVarieComponent implements OnInit {
               controlloCampo.min = this.numeroMin[index];
             }
             arrayControlli.push(controlloCampo);
-            console.log(arrayControlli);
-            console.log('controllo campo massimo');
-            console.log(controlloCampo.max);
+            console.log('controlloCampo', controlloCampo);
           });
         }
-       /* console.log(arrayControlli);
-        console.log(JSON.stringify(arrayControlli));*/
+        console.log('arrayControlli :', arrayControlli);
         var formToSend = new Form;
         formToSend.form_id=this.numeroForm;
-
-        
-        //formToSend.form_body = JSON.stringify(arrayControlli).substring(1,JSON.stringify(arrayControlli).length-1);
         formToSend.form_body = JSON.stringify(arrayControlli);
-       console.log(formToSend);
+        console.log('FINAL SENDING FORM', formToSend);
         this.loadingFormService.createForm(formToSend).subscribe(data => {
-
+          this.toastr.success('Form has been submitted', 'Success');
+          console.log('FINAL CREATE FORM SUCCESS', data);
+        }, error => {
+          this.toastr.error(error.message, 'Error');
+          console.error('FINAL CREATE FORM ERROR', error);
         });
 
         
@@ -268,11 +265,15 @@ export class ProveVarieComponent implements OnInit {
         userSubmit.inputs.push(formFields);       
       });
       //parte in cui riempio la lista dei file
+      // part where I fill the file list
       if(this.uploader.queue.length==0){
+        // means populates User Submit
         this.popolaUserSubmit(periodRaw,dataAttuale,userSubmit);
       }else{
+        console.log('USER SAVE ELSE', this.uploader);
         this.uploader.queue.forEach((element,index) => {
           var file = element._file;
+          console.log('UPLOADER FILE', file);
           userAttachments = new FormAttachments;
           var r = new FileReader();
   
@@ -288,6 +289,7 @@ export class ProveVarieComponent implements OnInit {
               userAttachments.content=bytes;
               
             }
+            // means populates User Submit
             this.popolaUserSubmit(periodRaw,dataAttuale,userSubmit);
           }
           r.readAsArrayBuffer(file);
@@ -303,7 +305,7 @@ export class ProveVarieComponent implements OnInit {
       }
     
     }
-  
+    // means populates User Submit
     popolaUserSubmit(periodRaw:any,dataAttuale,userSubmit){
       userSubmit.locale_id=JSON.parse(localStorage.getItem('currentUser')).localeid;
       userSubmit.form_id=String(this.numeroForm);
@@ -311,10 +313,27 @@ export class ProveVarieComponent implements OnInit {
       userSubmit.empty_form = false;  
       userSubmit.period = String(periodRaw);    
       userSubmit.year =  Number(moment(dataAttuale).format('YY'));
-      this.loadingFormService.submitForm(userSubmit).subscribe(data => {});
+      this.loadingFormService.submitForm(userSubmit).subscribe(data => {
+        console.log('USER FORM SUBMIT SUCCESS', data);
+        if(!data) {
+          this.toastr.error('There was an error while submitting form', 'Error');  
+          return;
+        } else {
+          this.toastr.success('Form has been submitted successfully.', 'Success');
+        }
+      }, error => {
+        console.log('USER FORM SUBMIT ERROR', error);
+        this.toastr.error(error.error.error.message, 'Error');
+      });
     }
-
+    // means check comparison
+    // segno means sign
     checkConfronto(val1,val2,segno,elemento1,elemento2){
+      console.log('checkConfronto val1', val1);
+      console.log('checkConfronto val2', val2);
+      console.log('checkConfronto segno', segno);
+      console.log('checkConfronto elemento1', elemento1);
+      console.log('checkConfronto elemento2', elemento2);
       switch(segno){
         case '=':
           if(val1==val2){
@@ -363,40 +382,50 @@ export class ProveVarieComponent implements OnInit {
 
 
   ngOnInit() {
- //   console.log(JSON.parse(localStorage.getItem('currentUser')).isadmin);
    this.isAdmin =  JSON.parse(localStorage.getItem('currentUser')).isadmin;
-   this.tornaIndietro();
+   this.tornaIndietro(); // means come back
   }
-
+  // means take data forms
+  // Danial: this method is invoked when a row is clicked.
+  // and generates form fields dynamically
   prendiDatiForm(numero:number,nome:string){
     //dato che metto prima i filtri do confronto, 
     //quando popolo i filtri max e min vado a 
     //sottrarre all'indice il numero di confronti passati
+    
+    // since I put the filters first by comparison,
+    // when the max and min filters go I go to
+    // subtract the number of past comparisons from the index
     let contatore=0; // counter
+    // camp means field and segno means sign
     let array = {'campo1':'','segno':'','campo2':''};
     this.title=nome;
 
     this.myInputForm = this.fb.group({
+      // means values
       valories: this.fb.array([
           this.initInputForm()
       ]),
-
+      // means comparison fields
       campiConfronto: this.fb.array([
         //this.initComparisonForm(array)
       ])
     });
     this.loadingFormService.getKpiByFormId(numero).subscribe(data => {
-      console.log('getKpiByFormId', data)
+      console.log('getKpiByFormId', data);
       data.forEach(element => {
         this.listaKpiPerForm.push(element);
       });
 
     }, error => {
+      // alert('KPI Form Error ' + error.error.error.message);
+      setTimeout(() => this.toastr.error(error.error.error.message, 'KPI Form Error'), 2000);
       console.log('getKpiByFormId', error)
     });
 
     this.loadingFormService.getFormFilterById(numero).subscribe(data => {
-      //this.jsonRicevuto = ;
+      console.log('getFormFilterById', data.ok);
+      console.log('getFormFilterById', data);
       JSON.parse(data.form_body).forEach((element,index) => {
         console.log(element);
         if(element.campo1!=null){
@@ -406,74 +435,71 @@ export class ProveVarieComponent implements OnInit {
           array.campo2=element.campo2;
           this.defaultFont[index]=array;
           this.addComparisonForm(array);
-          // this.myInputForm.get('campiConfronto').controls[index].setValue(array);
         }else if(element.max!=null && element.max.length!=24){
-          /*console.log(element.max);
+          console.log(element.max);
           console.log(typeof element.max === "string");
-          console.log('b '+(typeof element.max === "number"));
-          console.log('c ' +(element.max.length ==24));*/
-          
-          
           this.numeroMax[index-contatore]=element.max;
           this.numeroMin[index-contatore]=element.min;
-
         }else if(element.max!=null && element.max.length==24){
           this.maxDate[index-contatore]=element.max;
           this.minDate[index-contatore]=element.min;
         }
-
-
       });
-      
-      
+    }, error => {
+      setTimeout(() => this.toastr.error(error.error.error.message, 'Form Filter Error'),0);
+      // this.toastr.error(error.error.message, 'Error');
+      console.log('getFormFilterById', error)
     });
     //se non ci sono filtri per questo form creo un campo vuoto
+    // if there are no filters for this form I create an empty field
     //array=={'campo1':'','segno':'','campo2':''}?this.initComparisonForm(array):'';
       if(array.campo1 == "" && array.segno == "" && array.campo2==""){
         this.initComparisonForm(array);
-        console.log(array);
+        console.log('IF FIELDS ARE EMPTY:', array);
       }else{
         console.log(array);
       }
-
+    // mostra means show table  
     setTimeout(() => this.mostraTabella = true, 700);
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
       let jsonForm = data;
-
+      console.log('DYNAMIC FORM FIELDS : jsonForm', jsonForm);
       this.arrayFormElements = jsonForm[0].reader_configuration.inputformatfield;
-//      console.log(this.arrayFormElements);
+      console.log('this.arrayFormElements', this.arrayFormElements);
       for(let i=0;i<this.arrayFormElements.length-1;i++){
         this.addInputForm();
       }
-
-      
-     // this.valori = jsonForm.FORM_NAME;
       this.numeroForm=numero;
+    }, error => {
+      this.toastr.error(error.error.message, 'Error')
+      console.log('getFormById', error)
     }); 
     
   }
-
+  // means come back it is being called on ngOnInt for initial data loading.
   tornaIndietro(){
-    //let userIdForForm = JSON.parse(localStorage.getItem('currentUser')).user_id;
-    console.log(localStorage.getItem('currentUser'));
-
-    console.log('ASSUMING CALL IS FROM HERE.')
-
+    // Danial TODO: get userId from auth service observable.
     let userIdForForm = JSON.parse(localStorage.getItem('currentUser')).userid;
     if(this.isAdmin){
       this.loadingFormService.getLoadingForms().subscribe(data =>{
+        console.log('ADMIN : getLoadingForms', data);
         this.jsonForm = data;
+        // vai means go
+        // Danial TODO: replace data table with new one and remove these timeout conditions
         setTimeout(() => this.vai =true, 3000);
         setTimeout(() => this.dataSource.paginator = this.paginator,3000);
         setTimeout(() => this.dataSource.sort = this.sort,3000);
         this.pageSizeOptions.push(this.jsonForm);
         this.dataSource= new MatTableDataSource(this.jsonForm);
         this.daje=true;   
+      }, error => {
+        console.error('getLoadingForms error', error);
       })
       
     }else{
       this.loadingFormService.getFormsByUserId(userIdForForm).subscribe(data => {
+      console.log('Simple User: getFormsByUserId', data);
       this.jsonForm = data;
       setTimeout(() => this.vai =true, 3000);
       setTimeout(() => this.dataSource.paginator = this.paginator,3000);
@@ -481,15 +507,17 @@ export class ProveVarieComponent implements OnInit {
       this.pageSizeOptions.push(this.jsonForm);
       this.dataSource= new MatTableDataSource(this.jsonForm); 
       this.daje=false;   
+      }, error => {
+        console.error('Simple User: getFormsByUserId', error);
       });
     }
-    
-    this.jsonForm=null;
-    this.vai=false;  
-    this.mostraTabella = false;
-    this.pageSizeOptions = [5, 10, 25, 100];
-    //getForms()    
-    console.log(this.dataSource);
+
+    // Danial: These variables are doing nothing
+    // this.jsonForm=null;
+    // this.vai=false;  
+    // this.mostraTabella = false;
+    // this.pageSizeOptions = [5, 10, 25, 100];  
+    // console.log('THIS DATA SOURCE ==>',this.dataSource);
   }
 
   applyFilter(filterValue: string) {
@@ -503,14 +531,14 @@ export class ProveVarieComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
+  // means filter elements
   filtraElementi(campo,indice:number){
-    console.log(campo);
-   let arrayappoggio =    new Array(this.arrayFormElements);
+    console.log('FILTER ELEMENTS',campo);
+    let arrayappoggio =    new Array(this.arrayFormElements);
     console.log(this.arraySecondo);
     this.arraySecondo[indice] =  arrayappoggio.filter(
-      elemento => (elemento.Type === campo.Type)&&(elemento.Name != campo.Name));
-      console.log(this.arraySecondo);
+    elemento => (elemento.Type === campo.Type)&&(elemento.Name != campo.Name));
+    console.log(this.arraySecondo);
   }
    
   fileData = null;
@@ -520,32 +548,8 @@ export class ProveVarieComponent implements OnInit {
 
   DatiNonPervenuti(){
     alert('ueue');
-    //this.form.controls['name'].disable();
   }
  
-  /*onSubmit() {
-    const formData = new FormData();
-    formData.append('file', this.fileData);
-    this.http.post('url/to/your/api', formData)
-      .subscribe(res => {
-        console.log(res);
-        alert('SUCCESS !!');
-      })
-  }*/
-
-
-  /*onClick() {   
-    const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
-    fileUpload.onchange = () => {
-          for (let index = 0; index < fileUpload.files.length; index++) {
-                const file = fileUpload.files[index];
-                this.files.push({ data: file, state: 'in', 
-                  inProgress: false, progress: 0, canRetry: false, canCancel: true });
-          }
-          this.uploadFiles();
-    };
-    fileUpload.click();
-  }*/
 
 cancelFile(file: FileUploadModel) {    
     this.removeFileFromArray(file);
@@ -553,7 +557,6 @@ cancelFile(file: FileUploadModel) {
 
 cancelFile1(file: FileUploadModel) {
   this.removeFileFromArray(file);
-  //this.onClick();
 }
 
 retryFile(file: FileUploadModel) {
@@ -615,54 +618,29 @@ private uploadFile(file: FileUploadModel) {
       }
   }
 
+  public uploader:FileUploader = new FileUploader({url: URL});
+  public hasBaseDropZoneOver:boolean = false;
+  public hasAnotherDropZoneOver:boolean = false;
+  
+  public fileOverBase(e:any):void {
+    this.hasBaseDropZoneOver = e;
+  }
+  
+  public fileOverAnother(e:any):void {
+    this.hasAnotherDropZoneOver = e;
+  }
 
-
+  cliccato(){
+    this.uploader.queue.forEach((element,index) => {
+      var reader = new FileReader();
+      console.log(element._file);
+      // means test
+      console.log('prova'+reader.readAsText(element._file));
+      console.log(reader.readAsText(element._file));
+    });
+    console.log(this.uploader.queue);
+    //const blob = this.uploader as Blob;
+  }
 
   
-  
-    public uploader:FileUploader = new FileUploader({url: URL});
-    public hasBaseDropZoneOver:boolean = false;
-    public hasAnotherDropZoneOver:boolean = false;
-   
-    public fileOverBase(e:any):void {
-      this.hasBaseDropZoneOver = e;
-    }
-   
-    public fileOverAnother(e:any):void {
-      this.hasAnotherDropZoneOver = e;
-    }
-  
-
-
-    cliccato(){
-      this.uploader.queue.forEach((element,index) => {
-        var reader = new FileReader();
-        /*var dai:File = element._file;
-        var ciaone = dai;*/
-        console.log(element._file);
-        console.log('prova'+reader.readAsText(element._file));
-        console.log(reader.readAsText(element._file));
-        //.uploader.queue[index].file
-      });
-      console.log(this.uploader.queue);
-      //const blob = this.uploader as Blob;
-      console.log('spazio################################################')
-      //console.log(blob);
-
-    }
-
-  
-}
-
-
-
-
-export class FileUploadModel {
-data: File;
-state: string;
-inProgress: boolean;
-progress: number;
-canRetry: boolean;
-canCancel: boolean;
-sub?: Subscription;
 }

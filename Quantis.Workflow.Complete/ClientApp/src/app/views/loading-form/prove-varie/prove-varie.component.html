@@ -1,5 +1,5 @@
-<div *ngIf='!vai' id="loader" >
-    <mat-progress-spinner class="loader"  mode="indeterminate"></mat-progress-spinner>
+<div *ngIf='!vai' id="loader" class="text-center">
+  <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
 
 <!-- TABELLA SCELTA DEL FORM -->
@@ -76,6 +76,7 @@
 
 
 <!-- TABELLA FORM SCELTO VISTA ADMINISRATOR -->
+<!-- FORM TABLE CHOSEN VIEW ADMINISRATOR -->
 <div *ngIf='mostraTabella && vai && daje'>
   <label>admin</label>
 <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'>    
@@ -95,7 +96,6 @@
             <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
               <div>
                 <div  class="my-form col-sm-12">
-                  
                   <mat-form-field appearance="outline" >
                     <mat-label>{{arrayFormElements[i].name}}</mat-label>
                     <input matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"    formControlName="valoreUtente">
@@ -169,6 +169,7 @@
               <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body bg-white" [formGroupName]="i" >
                 <div  class="my-form col-xs-3">
                     <mat-form-field appearance="outline">
+                      <!-- Danial: error in console can not read property value of campo1 -->
                       <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
                         <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}</mat-option>
                             
@@ -232,15 +233,8 @@
 </div>
 </div>
 
-
-
-
-
-
-
-
-
 <!-- TABELLA FORM SCELTO USERS SECONDARIO -->
+<!-- FORM CHOSEN SECONDARY USERS TABLE -->
 <div *ngIf='mostraTabella && vai && !daje'>
     
     <label>admin</label>
@@ -257,7 +251,7 @@
             <div formArrayName="valories">
               <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
          
-    
+                <!-- Danial : here property type is undeined need to investigate -->
                 <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
                   <div>
                     <div class="my-form col-xs-3" ></div>
