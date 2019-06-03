@@ -6,6 +6,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
 {
     public class SDMTicketLVDTO
     {
+        public string Id { get; set; }
         public string ref_num { get; set; }
         public string Summary { get; set; }
         public string Description { get; set; }
