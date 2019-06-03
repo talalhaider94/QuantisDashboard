@@ -41,7 +41,7 @@ export class LoadingFormDetailComponent implements OnInit {
   }
 
   _formFilterById(formId: number) {
-    this.loadigFormService.getFormFilterById(formId).pipe().subscribe(data => {
+    this.loadigFormService.getFormById(formId).pipe().subscribe(data => {  //to get the forms fields: api/oracle/getformbyid/:id
       console.log('getFormFilterById', data)
     }, error => {
       this.toastr.error(error.message);

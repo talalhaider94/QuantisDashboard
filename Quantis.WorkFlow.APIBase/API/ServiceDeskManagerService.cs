@@ -566,6 +566,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var attributes = l.Element("Attributes").Elements("Attribute");
                 SDMTicketLVDTO dto = new SDMTicketLVDTO();
+                dto.Id = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "id").Element("AttrValue").Value;
                 dto.ref_num = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "ref_num").Element("AttrValue").Value;
                 dto.Description = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "description").Element("AttrValue").Value;
                 dto.Group = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "group").Element("AttrValue").Value;
