@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { saveAs } from 'file-saver';
 declare var $;
 var $this;
 
@@ -18,7 +19,7 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
 
 
-  constructor() { 
+  constructor() {
     $this = this;
   }
 
@@ -34,70 +35,70 @@ export class CatalogoKpiComponent implements OnInit {
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       datatable_Ref
-          .columns( 4 )
-          .search( this.value )
-          .draw();
+        .columns( 4 )
+        .search( this.value )
+        .draw();
     });
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
       datatable_Ref
-          .columns( 5 )
-          .search( this.value )
-          .draw();
+        .columns( 5 )
+        .search( this.value )
+        .draw();
     });
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       datatable_Ref
-          .columns( 10 )
-          .search( this.value )
-          .draw();
+        .columns( 10 )
+        .search( this.value )
+        .draw();
     });
     datatable_Ref.columns(3).every( function () {
       var that = this;
-   
+
       // Create the select list and search operation
       var select = $($this.searchCol4.nativeElement)
-          .on( 'change', function () {
-              that
-                  .search( $(this).val() )
-                  .draw();
-          } );
-   
+        .on( 'change', function () {
+          that
+            .search( $(this).val() )
+            .draw();
+        } );
+
       // Get the search data for the first column and add to the select list
       this
-          .cache( 'search' )
-          .sort()
-          .unique()
-          .each( function ( d ) {
-              select.append( $('<option value="'+d+'">'+d+'</option>') );
-          } );
+        .cache( 'search' )
+        .sort()
+        .unique()
+        .each( function ( d ) {
+          select.append( $('<option value="'+d+'">'+d+'</option>') );
+        } );
     } );
     datatable_Ref.columns(9).every( function () {
       var that = this;
-   
+
       // Create the select list and search operation
       var select = $($this.searchCol5.nativeElement)
-          .on( 'change', function () {
-              that
-                  .search( $(this).val() )
-                  .draw();
-          } );
-   
+        .on( 'change', function () {
+          that
+            .search( $(this).val() )
+            .draw();
+        } );
+
       // Get the search data for the first column and add to the select list
       this
-          .cache( 'search' )
-          .sort()
-          .unique()
-          .each( function ( d ) {
-              select.append( $('<option value="'+d+'">'+d+'</option>') );
-          } );
+        .cache( 'search' )
+        .sort()
+        .unique()
+        .each( function ( d ) {
+          select.append( $('<option value="'+d+'">'+d+'</option>') );
+        } );
     } );
- 
- 
+
+
     // export only what is visible right now (filters & paginationapplied)
     $(this.btnExportCSV.nativeElement).click(function (event) {
-        event.preventDefault();
-        //$this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
-        $this.table2csv(datatable_Ref, 'full', 'table.dataTables-reports');
-    });              
+      event.preventDefault();
+      //$this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
+      $this.table2csv(datatable_Ref, 'full', 'table.dataTables-reports');
+    });
   }
 
 
@@ -108,37 +109,39 @@ export class CatalogoKpiComponent implements OnInit {
 
     // Get header names
     $(tableElm+' thead').find('th').each(function() {
-        var $th = $(this);
-        var text = $th.text();
-        var header = '"' + text + '"';
-        // headers.push(header); // original code
-        if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+      var $th = $(this);
+      var text = $th.text();
+      var header = '"' + text + '"';
+      // headers.push(header); // original code
+      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
     });
     csv += headers.join(',') + "\n";
 
     // get table data
     if (exportmode == "full") { // total data
-        var totalRows = oTable.data().length;
-        for(let i = 0; i < totalRows; i++) {
-            var row = oTable.row(i).data();
-            console.log(row)
-            row = $this.strip_tags(row);
-            rows.push(row);
-        }
+      var totalRows = oTable.data().length;
+      for(let i = 0; i < totalRows; i++) {
+        var row = oTable.row(i).data();
+        console.log(row)
+        row = $this.strip_tags(row);
+        rows.push(row);
+      }
     } else { // visible rows only
-        $(tableElm+' tbody tr:visible').each(function(index) {
-            var row = [];
-            $(this).find('td').each(function(){
-                var $td = $(this);
-                var text = $td.text();
-                var cell = '"' +text+ '"';
-                row.push(cell);
-            });
-            rows.push(row);
-        })
+      $(tableElm+' tbody tr:visible').each(function(index) {
+        var row = [];
+        $(this).find('td').each(function(){
+          var $td = $(this);
+          var text = $td.text();
+          var cell = '"' +text+ '"';
+          row.push(cell);
+        });
+        rows.push(row);
+      })
     }
     csv += rows.join("\n");
-     console.log(csv);
+    console.log(csv);
+    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "CatalogKpi.csv");
   }
 
   strip_tags(html) {
