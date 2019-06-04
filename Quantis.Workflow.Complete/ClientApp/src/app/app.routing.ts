@@ -28,7 +28,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
   },
   {
@@ -78,6 +78,10 @@ export const routes: Routes = [
       {
         path: 'loading-form',
         loadChildren: './views/loading-form/loading-form.module#LoadingFormModule'
+      },
+      {
+        path: 'catalogo',
+        loadChildren: './views/catalogo/catalogo.module#CatalogoModule'
       }
     ]
   },

@@ -79,17 +79,17 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Catalogo',
-    url: '/coming-soon',
+    url: '/catalogo',
     icon: 'icon-doc',
     children: [
       {
         name: 'Catalogo KPI',
-        url: '/coming-soon',
+        url: '/catalogo/kpi',
         icon: 'fa fa-circle-thin'
       },
       {
         name: 'Catalogo Utenti',
-        url: '/coming-soon',
+        url: '/catalogo/utenti',
         icon: 'fa fa-circle-thin'
       },
     ]
@@ -101,11 +101,6 @@ export const navItems: NavData[] = [
     children: [
       {
         name: 'Admin',
-        url: '/loading-form/admin2',
-        icon: 'fa fa-circle-thin'
-      },
-      {
-        name: 'Admin New',
         url: '/loading-form/admin',
         icon: 'fa fa-circle-thin'
       },
