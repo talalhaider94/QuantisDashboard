@@ -16,7 +16,7 @@ using System.IO;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-    public class ServiceDeskManagerService : BaseService<ServiceDeskManagerService>, IServiceDeskManagerService
+    public class ServiceDeskManagerService : IServiceDeskManagerService
     {
         private readonly SDM.USD_WebServiceSoapClient _sdmClient = null;
         private readonly SDMExt.USD_R11_ExtSoapClient _sdmExtClient = null;
@@ -26,6 +26,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly List<SDMGroupDTO> _groupMapping;
         private readonly List<KeyValuePair<string,string>> _statusMapping;
         private readonly IDataService _dataService;
+        private readonly WorkFlowPostgreSqlContext _dbcontext;
         private void LogIn()
         {
             try
@@ -39,7 +40,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }            
             
@@ -57,19 +57,18 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     catch (Exception e)
                     {
-                        LogException(e, LogLevel.Error);
                         throw e;
                     }
                 }
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
         }
-        public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IConfiguration configuration, ILogger<ServiceDeskManagerService> logger) : base(logger, context)
+        public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IConfiguration configuration, ILogger<ServiceDeskManagerService> logger)
         {
+            _dbcontext = context;
             _groupMapping = new List<SDMGroupDTO>()
             {
                 new SDMGroupDTO("cnt:D3D5EE53E8F26A46B1B8DF358EC30065","IMEL_Referenti_OP","IM"),
@@ -100,8 +99,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var passObj = _dbcontext.Configurations.FirstOrDefault(o => o.enable && o.owner.Equals("be_sdm") && o.key.Equals("password"));
             if (usernameObj == null || passObj == null)
             {
-                var exp = new Exception("Cannot get SDM login Properties");
-                LogException(exp, LogLevel.Error);
+                var exp = new Exception("Cannot get SDM login Properties");                
                 throw exp;
             }
             else
@@ -124,7 +122,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);                
+                throw e;            
             }
             finally
             {
@@ -145,8 +143,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                LogOut();
+                throw e;
             }
             finally
             {
@@ -168,7 +165,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
+                throw e;
             }
             finally
             {
@@ -188,8 +185,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return null;
+                throw e;
             }
             finally
             {
@@ -251,7 +247,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);                
+                throw e;
             }
             finally
             {
@@ -331,7 +327,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
+                throw e;
             }
             finally
             {
@@ -374,7 +370,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch(Exception e)
             {
-                LogException(e, LogLevel.Error);
+                throw e;
             }
             finally
             {
@@ -435,9 +431,11 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
+                throw e;
+            }
+            finally
+            {
                 LogOut();
-                return null;
             }
         }
         public SDMTicketLVDTO EscalateTicketbyKPIID(int id, string status,string description)
@@ -492,9 +490,11 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
+                throw e;
+            }
+            finally
+            {
                 LogOut();
-                return null;
             }
         }
 
@@ -511,8 +511,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                LogOut();
+                throw e;
             }
             finally
             {
@@ -537,23 +536,20 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                         else
                         {
-                            LogException(new Exception("Form Adapter returned with :" + response.ToString()), LogLevel.Error);
-                            return false;
+                            throw new Exception("Form Adapter returned with :" + response.ToString());
 
                         }
                     }
                     else
                     {
-                        LogException(new Exception("Connection to form adaptor cannot be created"), LogLevel.Error);
-                        return false;
+                        throw new Exception("Connection to form adaptor cannot be created");
                     }
 
                 }
             }
             catch(Exception e)
             {
-                LogException(e,LogLevel.Error);
-                return false;
+                throw e;
             }
             
         }

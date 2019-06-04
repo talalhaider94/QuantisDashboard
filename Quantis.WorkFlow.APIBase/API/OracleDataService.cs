@@ -16,12 +16,13 @@ using System.Net.Http;
 namespace Quantis.WorkFlow.APIBase.API
 {
     
-    public class OracleDataService:BaseService<OracleDataService>, IOracleDataService
+    public class OracleDataService:IOracleDataService
     {
         private static string _connectionstring=null;
-        public OracleDataService(WorkFlowPostgreSqlContext context,
-            ILogger<OracleDataService> logger):base(logger, context)
+        private WorkFlowPostgreSqlContext _dbcontext;
+        public OracleDataService(WorkFlowPostgreSqlContext context)
         {
+            _dbcontext = context;
             if (_connectionstring == null)
             {
                 _connectionstring = getConnectionString();
@@ -73,7 +74,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch(Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -141,7 +141,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -231,7 +230,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
         }
@@ -301,7 +299,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -356,7 +353,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -446,7 +442,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -513,7 +508,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -546,7 +540,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
         }
@@ -560,7 +553,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 if (bsiconf == null || oracleconf == null)
                 {
                     var e = new Exception("Configuration of BSI or Oracle does not exist");
-                    LogException(e, LogLevel.Error);
                     throw e;
                 }
                 using (var client = new HttpClient())
@@ -574,7 +566,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     else
                     {
                         var e = new Exception("Connection to retrieve Orcle credentials cannot be created");
-                        LogException(e, LogLevel.Error);
                         throw e;
                     }
 
@@ -584,7 +575,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch(Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             

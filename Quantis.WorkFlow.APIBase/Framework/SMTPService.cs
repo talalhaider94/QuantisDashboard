@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Framework
 {
-    public class SMTPService : BaseService<SMTPService>, ISMTPService
+    public class SMTPService :ISMTPService
     {
         private string from;
         private string sslTrust;
@@ -21,11 +21,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
         private string serverHost;
         private bool isAuth;        
         private string notifierAlias;
-        
+        WorkFlowPostgreSqlContext _dbcontext;
 
-        public SMTPService(WorkFlowPostgreSqlContext context,
-             ILogger<SMTPService> logger) : base(logger, context)
+
+        public SMTPService(WorkFlowPostgreSqlContext context)
         {
+            _dbcontext = context;
             from = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value;
             sslTrust = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "ssl_trust").value;
             senderPassword = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value;
@@ -66,8 +67,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }
 
             return true;
