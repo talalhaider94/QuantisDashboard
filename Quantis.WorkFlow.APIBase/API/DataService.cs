@@ -424,6 +424,10 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var kpi = _dbcontext.Forms.Include(o => o.CatalogKPI).Single(o => o.form_id == Id);
+                if (kpi.CatalogKPI == null)
+                {
+                    return null;
+                }
                 var dto = new KPIOnlyContractDTO()
                 {
                     contract = kpi.CatalogKPI.contract,

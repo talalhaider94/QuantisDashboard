@@ -57,7 +57,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
             }
             var code = HttpStatusCode.InternalServerError; // 500 if unexpected
-            var result = JsonConvert.SerializeObject(new { error = "Some Error has occured in API check logs or contact administrator" });
+            var result = JsonConvert.SerializeObject(new { error = "Some Error has occurred in API check logs or contact administrator" });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
