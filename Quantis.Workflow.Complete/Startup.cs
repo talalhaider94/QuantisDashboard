@@ -46,6 +46,7 @@ namespace Quantis.WorkFlow.Complete
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new LowercaseNamingStrategy() });
             services.AddSpaStaticFiles(configuration =>
             {
@@ -91,7 +92,7 @@ namespace Quantis.WorkFlow.Complete
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                //app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -105,6 +106,7 @@ namespace Quantis.WorkFlow.Complete
             {
                 builder.UseMiddleware<AuthenticationMiddleware>();
             });
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

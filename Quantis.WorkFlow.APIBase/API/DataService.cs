@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-    public class DataService : BaseService<DataService>,IDataService
+    public class DataService:IDataService
     {
 
         private IMappingService<GroupDTO, T_Group> _groupMapper;
@@ -34,9 +34,9 @@ namespace Quantis.WorkFlow.APIBase.API
         private IOracleDataService _oracleAPI;
         private IConfiguration _configuration;
         private ISMTPService _smtpService;
+        private WorkFlowPostgreSqlContext _dbcontext { get; set; }
 
         public DataService(WorkFlowPostgreSqlContext context,
-            ILogger<DataService> logger,
             IMappingService<GroupDTO, T_Group> groupMapper, 
             IMappingService<PageDTO, T_Page> pageMapper, 
             IMappingService<WidgetDTO, T_Widget> widgetMapper,
@@ -47,7 +47,7 @@ namespace Quantis.WorkFlow.APIBase.API
             IMappingService<FormAttachmentDTO, T_FormAttachment> fromAttachmentMapper,
             IConfiguration configuration,
             ISMTPService smtpService,
-            IOracleDataService oracleAPI) :base(logger,context)
+            IOracleDataService oracleAPI)
         {
             _groupMapper = groupMapper;
             _pageMapper = pageMapper;
@@ -60,6 +60,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _fromAttachmentMapper = fromAttachmentMapper;
             _configuration = configuration;
             _smtpService = smtpService;
+            _dbcontext = context;
         }
         public bool CronJobsScheduler()
         {
@@ -85,8 +86,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);                
-                return false;
+                throw e;
             }
         }
         public List<FormAttachmentDTO> GetAttachmentsByFormID(int formId)
@@ -97,8 +97,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return null;
+                throw e;
             }
         }
         public FormRuleDTO GetFormRuleByKPIID(string kpiId)
@@ -109,8 +108,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return null;
+                throw e;
             }
         }
         public bool AddUpdateGroup(GroupDTO dto)
@@ -133,8 +131,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch(Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }            
         }
 
@@ -158,8 +155,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }
         }
 
@@ -177,8 +173,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return null;
+                throw e;
             }
         }
         public bool AddUpdateUser(UserDTO dto)
@@ -202,8 +197,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }
         }
 
@@ -226,8 +220,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }
         }
         public bool AddUpdateKpi(CatalogKpiDTO dto)
@@ -249,8 +242,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }
         }
         public List<GroupDTO> GetAllGroups()
@@ -262,7 +254,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch(Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -277,7 +268,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -291,7 +281,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -306,7 +295,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -321,7 +309,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -336,7 +323,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -355,8 +341,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return false;
+                throw e;
             }
         }
 
@@ -373,7 +358,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -388,7 +372,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -403,7 +386,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -418,7 +400,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -433,7 +414,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -444,6 +424,10 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var kpi = _dbcontext.Forms.Include(o => o.CatalogKPI).Single(o => o.form_id == Id);
+                if (kpi.CatalogKPI == null)
+                {
+                    return null;
+                }
                 var dto = new KPIOnlyContractDTO()
                 {
                     contract = kpi.CatalogKPI.contract,
@@ -454,7 +438,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
         }
@@ -468,7 +451,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
             
@@ -530,8 +512,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
-                    LogException(e, LogLevel.Error);         
-                    return false;
+                    throw e;
                 }
             };
             
@@ -547,7 +528,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -594,7 +574,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
         }
@@ -619,7 +598,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
+                throw e;
             }
             return false;
         }
@@ -647,8 +626,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return -1;
+                throw e;
             }
             
         }
@@ -700,10 +678,8 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                
+                throw e;
             }
-            return null;
         }
         public CreateTicketDTO GetKPICredentialToCreateTicket(int Id)
         {
@@ -727,7 +703,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
 
@@ -790,8 +765,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
-                return null;
+                throw e;
             }
         }
         public List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId)
@@ -809,7 +783,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                LogException(e, LogLevel.Error);
                 throw e;
             }
         }
@@ -829,15 +802,13 @@ namespace Quantis.WorkFlow.APIBase.API
                         return true;
                     }
                     else
-                    {
-                        LogException(new Exception("Form Adapter returned with :" + response.ToString()), LogLevel.Error);
+                    {                        
                         return false;
 
                     }
                 }
                 else
-                {
-                    LogException(new Exception("Connection to form adaptor cannot be created"), LogLevel.Error);
+                {                    
                     return false;
                 }
 
