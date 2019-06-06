@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quantis.WorkFlow.Models;
+using Quantis.WorkFlow.Models.Information;
 using System;
 using System.Collections.Generic;
 using System.Linq;

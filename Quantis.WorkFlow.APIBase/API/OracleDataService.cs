@@ -19,7 +19,7 @@ namespace Quantis.WorkFlow.APIBase.API
     public class OracleDataService:IOracleDataService
     {
         private static string _connectionstring=null;
-        private WorkFlowPostgreSqlContext _dbcontext;
+        private readonly WorkFlowPostgreSqlContext _dbcontext;
         public OracleDataService(WorkFlowPostgreSqlContext context)
         {
             _dbcontext = context;

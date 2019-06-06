@@ -23,18 +23,19 @@ namespace Quantis.WorkFlow.APIBase.API
     public class DataService:IDataService
     {
 
-        private IMappingService<GroupDTO, T_Group> _groupMapper;
-        private IMappingService<PageDTO, T_Page> _pageMapper;
-        private IMappingService<WidgetDTO, T_Widget> _widgetMapper;
-        private IMappingService<UserDTO, T_CatalogUser> _userMapper;
-        private IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
-        private IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
-        private IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
-        private IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;        
-        private IOracleDataService _oracleAPI;
-        private IConfiguration _configuration;
-        private ISMTPService _smtpService;
-        private WorkFlowPostgreSqlContext _dbcontext { get; set; }
+        private readonly IMappingService<GroupDTO, T_Group> _groupMapper;
+        private readonly IMappingService<PageDTO, T_Page> _pageMapper;
+        private readonly IMappingService<WidgetDTO, T_Widget> _widgetMapper;
+        private readonly IMappingService<UserDTO, T_CatalogUser> _userMapper;
+        private readonly IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
+        private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
+        private readonly IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
+        private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;        
+        private readonly IOracleDataService _oracleAPI;
+        private readonly IConfiguration _configuration;
+        private readonly ISMTPService _smtpService;
+        private readonly IInformationService _infomationAPI;
+        private readonly WorkFlowPostgreSqlContext _dbcontext;
 
         public DataService(WorkFlowPostgreSqlContext context,
             IMappingService<GroupDTO, T_Group> groupMapper, 
@@ -47,7 +48,8 @@ namespace Quantis.WorkFlow.APIBase.API
             IMappingService<FormAttachmentDTO, T_FormAttachment> fromAttachmentMapper,
             IConfiguration configuration,
             ISMTPService smtpService,
-            IOracleDataService oracleAPI)
+            IOracleDataService oracleAPI,
+            IInformationService infomationAPI)
         {
             _groupMapper = groupMapper;
             _pageMapper = pageMapper;
@@ -61,6 +63,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _configuration = configuration;
             _smtpService = smtpService;
             _dbcontext = context;
+            _infomationAPI = infomationAPI;
         }
         public bool CronJobsScheduler()
         {
@@ -523,8 +526,8 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var bsiconf = _dbcontext.Configurations.Single(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
-                return bsiconf.value;
+                var bsiconf = _infomationAPI.GetConfiguration("be_bsi", "bsi_api_url");
+                return bsiconf.Value;
             }
             catch (Exception e)
             {
@@ -540,8 +543,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account==username);
                 if (usr != null)
                 {
-                    var secret_key = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "secret_key");
-                    var db_password = sha256_hash(secret_key.value + usr.password);
+                    var secret_key = _infomationAPI.GetConfiguration("be_restserver","secret_key");
+                    
+                    var db_password = sha256_hash(secret_key.Value + usr.password);
                     if (password == db_password)
                     {
                         var token = MD5Hash(usr.userid + DateTime.Now.Ticks);
@@ -816,10 +820,10 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         private int getSessionTimeOut()
         {
-            var session = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "session_timeout");
+            var session = _infomationAPI.GetConfiguration("be_restserver","session_timeout");            
             if (session != null)
             {
-                int value = Int32.Parse(session.value);
+                int value = Int32.Parse(session.Value);
                 return value;
             }
             return 15;

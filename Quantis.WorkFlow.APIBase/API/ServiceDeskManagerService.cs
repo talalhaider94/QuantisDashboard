@@ -27,6 +27,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly List<KeyValuePair<string,string>> _statusMapping;
         private readonly IDataService _dataService;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+        private readonly IInformationService _infomationAPI;
         private void LogIn()
         {
             try
@@ -66,9 +67,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IConfiguration configuration, ILogger<ServiceDeskManagerService> logger)
+        public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IInformationService infomationAPI)
         {
             _dbcontext = context;
+            _infomationAPI = infomationAPI;
             _groupMapping = new List<SDMGroupDTO>()
             {
                 new SDMGroupDTO("cnt:D3D5EE53E8F26A46B1B8DF358EC30065","IMEL_Referenti_OP","IM"),
@@ -95,8 +97,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 _sdmExtClient = new SDMExt.USD_R11_ExtSoapClient(SDMExt.USD_R11_ExtSoapClient.EndpointConfiguration.USD_R11_ExtSoap);
             }
             _dataService = dataService;
-            var usernameObj = _dbcontext.Configurations.FirstOrDefault(o => o.enable && o.owner.Equals("be_sdm") && o.key.Equals("username"));
-            var passObj = _dbcontext.Configurations.FirstOrDefault(o => o.enable && o.owner.Equals("be_sdm") && o.key.Equals("password"));
+            var usernameObj = _infomationAPI.GetConfiguration("be_sdm","username");
+            var passObj = _infomationAPI.GetConfiguration("be_sdm","password");
             if (usernameObj == null || passObj == null)
             {
                 var exp = new Exception("Cannot get SDM login Properties");                
@@ -105,8 +107,8 @@ namespace Quantis.WorkFlow.APIBase.API
             else
             {
                 _sid = -1;
-                _username = usernameObj.value;
-                _password = passObj.value;
+                _username = usernameObj.Value;
+                _password = passObj.Value;
             }
         }
         public List<SDMTicketLVDTO> GetAllTickets()
