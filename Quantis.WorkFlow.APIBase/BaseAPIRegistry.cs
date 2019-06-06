@@ -3,9 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Quantis.WorkFlow.APIBase.API;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.APIBase.Mappers;
+using Quantis.WorkFlow.APIBase.Mappers.Information;
 using Quantis.WorkFlow.Models;
+using Quantis.WorkFlow.Models.Information;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
+using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
@@ -28,6 +31,7 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IServiceDeskManagerService, ServiceDeskManagerService>();
             services.AddTransient<IOracleDataService, OracleDataService>();
             services.AddTransient<ISMTPService, SMTPService>();
+            services.AddTransient<IInformationService, InformationService>();
         }
         public static void RegisterMappers(IServiceCollection services)
         {
@@ -39,6 +43,7 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IMappingService<FormAttachmentDTO, T_FormAttachment>, FormAttachmentMapper>();
             services.AddTransient<IMappingService<CatalogKpiDTO, T_CatalogKPI>, CatalogKpiMapper>();
             services.AddTransient<IMappingService<ApiDetailsDTO, T_APIDetail>, ApiMapper>();
+            services.AddTransient<IMappingService<ConfigurationDTO, T_Configuration>, ConfigurationMapper>();
         }
     }
 }
