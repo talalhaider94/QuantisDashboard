@@ -30,6 +30,11 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_FormLog> FormLogs { get; set; }
         public DbSet<T_NotifierLog> NotifierLogs { get; set; }
 
+        public DbSet<T_UserRole> UserRoles { get; set; }
+        public DbSet<T_Role> Roles { get; set; }
+        public DbSet<T_RolePermission> RolePermissions { get; set; }
+        public DbSet<T_Permission> Permissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             
@@ -48,6 +53,10 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_FormAttachment_Configuration());
             builder.ApplyConfiguration(new T_FormLog_Configuration());
             builder.ApplyConfiguration(new T_NotifierLog_Configuration());
+            builder.ApplyConfiguration(new T_UserRole_Configuration());
+            builder.ApplyConfiguration(new T_Role_Configuration());
+            builder.ApplyConfiguration(new T_RolePermission_Configuration());
+            builder.ApplyConfiguration(new T_Permission_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -70,6 +79,10 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_FormAttachment>();
             updateUpdatedProperty<T_FormLog>();
             updateUpdatedProperty<T_NotifierLog>();
+            updateUpdatedProperty<T_UserRole>();
+            updateUpdatedProperty<T_Role>();
+            updateUpdatedProperty<T_RolePermission>();
+            updateUpdatedProperty<T_Permission>();
             return base.SaveChanges();
         }
 
