@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { saveAs } from 'file-saver';
 declare var $;
 var $this;
 
@@ -47,7 +48,7 @@ export class CatalogoUtentiComponent implements OnInit {
           event.preventDefault();
           //$this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
           $this.table2csv(datatable_Ref, 'full', 'table.dataTables-reports');
-      });              
+      });
     }
   
   
@@ -89,6 +90,8 @@ export class CatalogoUtentiComponent implements OnInit {
       }
       csv += rows.join("\n");
        console.log(csv);
+      var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, "CatalogUtenti.csv");
     }
   
     strip_tags(html) {
@@ -98,4 +101,3 @@ export class CatalogoUtentiComponent implements OnInit {
     }
     
   }
-  
