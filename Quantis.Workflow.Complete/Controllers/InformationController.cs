@@ -31,8 +31,8 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.DeleteConfiguration(owner,key);
         }
-        [HttpPost("AddUpdateFormRule")]
-        public void AddUpdateFormRule([FromBody]ConfigurationDTO dto)
+        [HttpPost("AddUpdateConfiguration")]
+        public void AddUpdateConfiguration([FromBody]ConfigurationDTO dto)
         {
             _infomationAPI.AddUpdateConfiguration(dto);
         }
