@@ -12,6 +12,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
 {
     public class SMTPService :ISMTPService
     {
+        private static bool ischache = false;
         private string from;
         private string sslTrust;
         private string senderPassword;
@@ -27,15 +28,20 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public SMTPService(WorkFlowPostgreSqlContext context)
         {
             _dbcontext = context;
-            from = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value;
-            sslTrust = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "ssl_trust").value;
-            senderPassword = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value;
-            senderUsername = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_username").value;
-            startTlsEnable = bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_start_tls_enable").value);
-            serverPort = System.Convert.ToInt32(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_port").value);
-            serverHost = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value;
-            isAuth = bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_auth").value);
-            notifierAlias = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_alias").value;
+            if (!ischache)
+            {
+                from = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value;
+                sslTrust = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "ssl_trust").value;
+                senderPassword = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value;
+                senderUsername = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_username").value;
+                startTlsEnable = bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_start_tls_enable").value);
+                serverPort = System.Convert.ToInt32(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_port").value);
+                serverHost = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value;
+                isAuth = bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_auth").value);
+                notifierAlias = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_alias").value;
+                ischache = true;
+            }
+            
         }
 
 

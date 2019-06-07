@@ -17,6 +17,7 @@ using System.Text;
 using System.Net;
 using System.Web.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -36,6 +37,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly ISMTPService _smtpService;
         private readonly IInformationService _infomationAPI;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+        private IMemoryCache _cache;
 
         public DataService(WorkFlowPostgreSqlContext context,
             IMappingService<GroupDTO, T_Group> groupMapper, 
@@ -49,7 +51,8 @@ namespace Quantis.WorkFlow.APIBase.API
             IConfiguration configuration,
             ISMTPService smtpService,
             IOracleDataService oracleAPI,
-            IInformationService infomationAPI)
+            IInformationService infomationAPI,
+            IMemoryCache memoryCache)
         {
             _groupMapper = groupMapper;
             _pageMapper = pageMapper;
@@ -64,6 +67,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _smtpService = smtpService;
             _dbcontext = context;
             _infomationAPI = infomationAPI;
+            _cache = memoryCache;
         }
         public bool CronJobsScheduler()
         {
@@ -561,6 +565,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 expire_time = DateTime.Now.AddMinutes(getSessionTimeOut())
                             });
                             _dbcontext.SaveChanges();
+                            _cache.Remove(res.Item1);
+                            var permissions=_infomationAPI.GetPermissionsByUserId(res.Item1).Select(o => o.Code).ToList();
+                            _cache.GetOrCreate("Permission_"+res.Item1, entry => permissions);
                             return new LoginResultDTO()
                             {
                                 IsAdmin = usr.user_admin,
@@ -571,6 +578,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 UserEmail= usr.mail,
                                 UserName=usr.ca_bsi_account
                             };
+                            
                         }
                     }
                 }

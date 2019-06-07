@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.Framework;
@@ -15,13 +16,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
     {
         private readonly RequestDelegate _next;
         private static List<Tuple<string, string>> _authentications=null;
-        private Dictionary<int, List<string>> _permissionMappings { get; set; }
         public AuthenticationMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, WorkFlowPostgreSqlContext _context, ILogger<AuthenticationMiddleware> _logger,IInformationService info)
+        public async Task Invoke(HttpContext context, WorkFlowPostgreSqlContext _context, ILogger<AuthenticationMiddleware> _logger,IInformationService info, IMemoryCache memoryCache)
         {
             if (_authentications == null)
             {
@@ -42,7 +42,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
                     {
                         UserId = token_entity.user_id,
                         UserName = user_entity.ca_bsi_account,
-                        Permissions = info.GetPermissionsByUserId(token_entity.user_id).Select(o => o.Code).ToList()
+                        Permissions = (List<string>)memoryCache.Get("Permission_"+token_entity.user_id)
                     };
                     token_entity.expire_time = DateTime.Now.AddMinutes(getSessionTimeOut(_context));
                     _context.SaveChanges();
@@ -92,10 +92,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
                 return value;
             }
             return 15;
-        }
-        private void applyPermissionMappings()
-        {
-
         }
     }
 }

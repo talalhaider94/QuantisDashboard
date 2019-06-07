@@ -50,7 +50,7 @@ namespace Quantis.WorkFlow.Complete
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.AddMemoryCache();
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new LowercaseNamingStrategy() });
             services.AddSpaStaticFiles(configuration =>
             {
