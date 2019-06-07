@@ -117,12 +117,11 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<BaseNameCodeDTO> GetRolesByUserLogin(HttpContext context)
+        public List<BaseNameCodeDTO> GetRolesByUserId(int userid)
         {
             try
             {
-                var user = context.User as AuthUser;
-                var roles=_dbcontext.UserRoles.Include(o => o.Role).Where(q => q.user_id == user.UserId).Select(r=>r.Role).ToList();
+                var roles=_dbcontext.UserRoles.Include(o => o.Role).Where(q => q.user_id == userid).Select(r=>r.Role).ToList();
                 return roles.Select(o => new BaseNameCodeDTO(o.id, o.name, o.code)).ToList();
 
             }
@@ -132,12 +131,11 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<BaseNameCodeDTO> GetPermissionsByUserLogin(HttpContext context)
+        public List<BaseNameCodeDTO> GetPermissionsByUserId(int userid)
         {
             try
             {
-                var user = context.User as AuthUser;
-                var roles = _dbcontext.UserRoles.Where(q => q.user_id == user.UserId).Select(s => s.role_id).ToList();
+                var roles = _dbcontext.UserRoles.Where(q => q.user_id == userid).Select(s => s.role_id).ToList();
                 var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).ToList();
                 return permission.Select(o => new BaseNameCodeDTO(o.id, o.name, o.code)).ToList();
             }

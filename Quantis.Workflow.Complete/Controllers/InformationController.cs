@@ -49,16 +49,16 @@ namespace Quantis.WorkFlow.Complete.Controllers
             return _infomationAPI.GetAllPermissions();
         }
 
-        [HttpGet("GetRolesByUserLogin")]
-        public List<BaseNameCodeDTO> GetRolesByUserLogin()
+        [HttpGet("GetRolesByUserId")]
+        public List<BaseNameCodeDTO> GetRolesByUserId(int userid)
         {
-            return _infomationAPI.GetRolesByUserLogin(HttpContext);
+            return _infomationAPI.GetRolesByUserId(userid);
         }
 
-        [HttpGet("GetPermissionsByUserLogin")]
-        public List<BaseNameCodeDTO> GetPermissionsByUserLogin()
+        [HttpGet("GetPermissionsByUserId")]
+        public List<BaseNameCodeDTO> GetPermissionsByUserId(int userid)
         {
-            return _infomationAPI.GetPermissionsByUserLogin(HttpContext);
+            return _infomationAPI.GetPermissionsByUserId(userid);
         }
 
         [HttpGet("GetPermissionsByRoleID")]
@@ -73,11 +73,11 @@ namespace Quantis.WorkFlow.Complete.Controllers
             _infomationAPI.AssignRolesToUser(HttpContext, roleIds);
         }
 
-        [HttpPost("AssignRolesToUser")]
-        public void AssignPermissionsToRoles([FromBody]int roleId, [FromBody]List<int> permissionIds)
-        {
-            _infomationAPI.AssignPermissionsToRoles(roleId, permissionIds);
-        }
+        //[HttpPost("AssignRolesToUser")]
+        //public void AssignPermissionsToRoles([FromBody]int roleId, [FromBody]List<int> permissionIds)
+        //{
+        //    _infomationAPI.AssignPermissionsToRoles(roleId, permissionIds);
+        //}
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,11 +14,11 @@ namespace Quantis.WorkFlow.Services
         public const string ADMIN = "ADMIN";
         public const string SUPERADMIN = "SUPERADMIN";
         public const string USER = "USER";
+
+        public static void FillOptions(AuthorizationOptions options)
+        {
+
+        }
     }
-    public enum UserAuthorizationType: int
-    {
-        Admin=1,
-        SuperAdmin=2,
-        User=0
-    }
+
 }

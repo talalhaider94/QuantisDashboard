@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,18 +73,14 @@ namespace Quantis.WorkFlow.Complete
                 .AllowAnyHeader()
                 .AllowCredentials());
             });
-            RegisterServices(services);
-            services.AddAuthorization(options =>
+            services.AddAuthorization();
+            services.AddAuthentication(options =>
             {
-                options.AddPolicy(WorkFlowPermissions.SUPERADMIN, policy =>
-                    policy.Requirements.Add(new UserTypeRequirement(UserAuthorizationType.SuperAdmin)));
-                options.AddPolicy(WorkFlowPermissions.ADMIN, policy =>
-                    policy.Requirements.Add(new UserTypeRequirement(UserAuthorizationType.Admin)));
-                options.AddPolicy(WorkFlowPermissions.USER, policy =>
-                    policy.Requirements.Add(new UserTypeRequirement(UserAuthorizationType.User)));
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             });
-
-            services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
+            services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, QuantisPermissionHandler>();
 
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

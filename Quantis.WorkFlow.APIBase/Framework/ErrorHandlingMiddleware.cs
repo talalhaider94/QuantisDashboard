@@ -56,6 +56,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
             {
 
             }
+            if(context.Response.StatusCode== (int)HttpStatusCode.Unauthorized)
+            {
+                var results = JsonConvert.SerializeObject(new { error = "Not Authorized!" });
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsync(results);
+            }
             var code = HttpStatusCode.InternalServerError; // 500 if unexpected
             var result = JsonConvert.SerializeObject(new { error = "Some Error has occurred in API check logs or contact administrator" });
             context.Response.ContentType = "application/json";

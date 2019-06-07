@@ -63,5 +63,10 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _sdmAPI.DownloadAttachment(attachmentHandle);
         }
+        [HttpPut("UploadAttachmentToTicket")]
+        public string UploadAttachmentToTicket(int ticketId, string docName, byte[] docContent)
+        {
+            return _sdmAPI.UploadAttachmentToTicket(ticketId, docName, docContent);
+        }
     }
 }

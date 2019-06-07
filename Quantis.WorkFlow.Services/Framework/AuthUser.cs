@@ -8,6 +8,6 @@ namespace Quantis.WorkFlow.Services.Framework
     {
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public UserAuthorizationType UserType { get; set; }
+        public List<string> Permissions { get; set; }
     }
 }

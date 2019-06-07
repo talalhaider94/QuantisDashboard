@@ -321,11 +321,35 @@ namespace Quantis.WorkFlow.APIBase.API
                     Dictionary<string, string> param = new Dictionary<string, string>();
                     param.Add("sid", _sid + "");
                     param.Add("repositoryHandle", "doc_rep:1002");
-                    param.Add("objectHandle", "cr:"+ ret.ref_num);
+                    param.Add("objectHandle", "cr:"+ ret.Id);
                     param.Add("description", att.doc_name);
                     param.Add("fileName", att.doc_name);
                     SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
                 }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                LogOut();
+            }
+            return ret;
+        }
+        public string UploadAttachmentToTicket(int ticketId,string docName,byte[] docContent)
+        {
+            string ret = null;
+            LogIn();
+            try
+            {
+                Dictionary<string, string> param = new Dictionary<string, string>();
+                param.Add("sid", _sid + "");
+                param.Add("repositoryHandle", "doc_rep:1002");
+                param.Add("objectHandle", "cr:" + ticketId);
+                param.Add("description", docName);
+                param.Add("fileName", docName);
+                SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, docContent);
             }
             catch (Exception e)
             {

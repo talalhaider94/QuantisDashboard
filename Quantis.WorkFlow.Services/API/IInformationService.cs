@@ -17,8 +17,8 @@ namespace Quantis.WorkFlow.Services.API
 
         List<BaseNameCodeDTO> GetAllRoles();
         List<BaseNameCodeDTO> GetAllPermissions();
-        List<BaseNameCodeDTO> GetRolesByUserLogin(HttpContext context);
-        List<BaseNameCodeDTO> GetPermissionsByUserLogin(HttpContext context);
+        List<BaseNameCodeDTO> GetRolesByUserId(int userid);
+        List<BaseNameCodeDTO> GetPermissionsByUserId(int userid);
         List<BaseNameCodeDTO> GetPermissionsByRoleID(int roleId);
         void AssignRolesToUser(HttpContext context,List<int> roleIds);
         void AssignPermissionsToRoles(int roleId, List<int> permissionIds);
