@@ -95,6 +95,28 @@ export const navItems: NavData[] = [
     ]
   },
   {
+    name: 'Report',
+    url: '/coming-soon',
+    icon: 'icon-doc',
+    children: [
+      {
+        name: 'WorkFlow Reminder',
+        url: '/coming-soon',
+        icon: 'fa fa-circle-thin'
+      }
+    ]
+  },
+  {
+    name: 'Configurations',
+    url: '/coming-soon',
+    icon: 'icon-doc'
+  },
+  {
+    name: 'KPI Archiviati',
+    url: '/archivedkpi',
+    icon: 'icon-doc'
+  },
+  {
     name: 'Loading Form',
     url: '/coming-soon',
     icon: 'fa fa-edit',

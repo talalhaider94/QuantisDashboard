@@ -1,0 +1,62 @@
+<div style="margin-top: -20px;">
+  <div class="table-responsive" style="background: #ffffff; padding: 10px">
+    <br><h2 style="color:#565656">ARCHIVED KPI</h2><br>
+    <div class="row">
+      <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
+    </div><br/>
+    <table class="table table-bordered" #ArchivedkpiTable>
+      <thead style="background: #E6E6E6">
+      <tr>
+        <th>KPI Name</th>
+        <th>Value</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>name</td>
+        <td>value</td>
+        <td align="center"><button class="btn btn-primary" data-toggle="modal" data-target="#archivedKpiModal">View</button></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="archivedKpiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="classTable" class="table table-bordered">
+          <thead style="background: #E6E6E6">
+          <tr>
+            <th>REFERENTI_INPUT</th>
+            <th>REFERENTI_1</th>
+            <th>REFERENTI_2</th>
+            <th>REFERENTI_3</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
