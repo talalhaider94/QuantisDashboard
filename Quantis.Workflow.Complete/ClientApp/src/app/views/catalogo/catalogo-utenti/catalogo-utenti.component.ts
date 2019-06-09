@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { DataTableDirective } from 'angular-datatables';
+import { ApiService } from '../../../_services/api.service';
+
 declare var $;
 var $this;
 
@@ -9,25 +12,58 @@ var $this;
   styleUrls: ['./catalogo-utenti.component.scss']
 })
 export class CatalogoUtentiComponent implements OnInit {
-    @ViewChild('kpiTable') block: ElementRef;
-    @ViewChild('searchCol1') searchCol1: ElementRef;
-    @ViewChild('searchCol2') searchCol2: ElementRef;
-    @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
-  
-  
-    constructor() {
-      $this = this;
+  @ViewChild('kpiTable') block: ElementRef;
+  @ViewChild('searchCol1') searchCol1: ElementRef;
+  @ViewChild('searchCol2') searchCol2: ElementRef;
+  @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
+  @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+
+
+  dtOptions: DataTables.Settings = {
+    'dom': 'rtip',
+    // "columnDefs": [{
+    // "targets": [0,2],
+    // "data": null,
+    // "defaultContent": '<input type="checkbox" />'
+    // }]
+  };
+
+  UtentiTableBodyData: any = [
+    {
+      id: '1',
+      BSI_ACCOUNT: 'BSI ACCOUNT',
+      NOME: 'NOME',
+      COGNOME: 'COGNOME',
+      STRUTTURA: 'STRUTTURA',
+      MAIL: 'MAIL',
+      USERID: 'USERID',
+      RESPONSABILE: 'RESPONSABILE'
     }
+  ]
+
+  constructor(private apiService: ApiService) {
+    $this = this;
+  }
   
     ngOnInit() {
-      this.initializeKpiTable();
     }
-  
-    initializeKpiTable(){
-      let datatable_Ref = $(this.block.nativeElement).DataTable({
-        "dom": 'rtip'
-      });
-  
+
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref)=>{
+      this.setUpDataTableDependencies(dataTable_Ref);
+    });
+    this.apiService.getCatalogoUsers().subscribe((data)=>{
+      this.UtentiTableBodyData = data;
+      console.log('kpis ', data);
+    })
+  }
+
+  getKpiTableRef(datatableElement: DataTableDirective): any {
+    return datatableElement.dtInstance;
+  }
+
+  setUpDataTableDependencies(datatable_Ref){
       // #column3_search is a <input type="text"> element
       $(this.searchCol1.nativeElement).on( 'keyup', function () {
         datatable_Ref

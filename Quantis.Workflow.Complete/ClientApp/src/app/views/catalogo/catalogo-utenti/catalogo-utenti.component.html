@@ -8,7 +8,7 @@
 <!--          <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>-->
           <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">CSV Export</button>
       </div><br/>
-      <table class="table table-bordered" #kpiTable>
+      <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions">
         <thead style="background: #E6E6E6">
         <tr>
             <th>BSI ACCOUNT</th>
@@ -21,33 +21,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>AA_11</td>
-            <td>AA_22</td>
-            <td>AA_33</td>
-            <td>AA_44</td>
-            <td>AA_55</td>
-            <td>AA_66</td>
-            <td>AA_77</td>
+          <tr *ngFor="let row of UtentiTableBodyData; index as i">
+            <td>{{row.ca_bsi_account}}</td>
+            <td>{{row.name}}</td>
+            <td>{{row.surname}}</td>
+            <td>{{row.organization}}</td>
+            <td>{{row.mail}}</td>
+            <td>{{row.userid}}</td>
+            <td>{{row.manager}}</td>
           </tr>
-          <tr>
-              <td>BB_11</td>
-              <td>BB_22</td>
-              <td>BB_33</td>
-              <td>BB_44</td>
-              <td>BB_55</td>
-              <td>BB_66</td>
-              <td>BB_77</td>
-            </tr>
-            <tr>
-              <td>CC_11</td>
-              <td>CC_22</td>
-              <td>CC_33</td>
-              <td>CC_44</td>
-              <td>CC_55</td>
-              <td>CC_66</td>
-              <td>CC_77</td>
-            </tr>
           </tbody>
       </table>
     </div>

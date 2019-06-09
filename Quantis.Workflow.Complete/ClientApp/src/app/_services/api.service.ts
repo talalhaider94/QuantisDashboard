@@ -10,7 +10,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getAllUsers(){
+  getCatalogoUsers(){
     return this.http.get('https://api.myjson.com/bins/p7x9t').pipe(
       tap(
         data => data,

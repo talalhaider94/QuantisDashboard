@@ -74,7 +74,6 @@ export class CatalogoKpiComponent implements OnInit {
     this.getKpiTableRef(this.datatableElement).then((dataTable_Ref)=>{
       this.setUpDataTableDependencies(dataTable_Ref);
     });
-    this.getAllUsers();
     this.apiService.getCatalogoKpis().subscribe((data)=>{
       this.kpiTableBodyData = data;
       console.log('kpis ', data);
@@ -211,12 +210,6 @@ export class CatalogoKpiComponent implements OnInit {
     var tmp = document.createElement("div");
     tmp.innerHTML = html;
     return tmp.textContent||tmp.innerText;
-  }
-
-  getAllUsers(){
-    this.apiService.getAllUsers().subscribe((data: any) => {
-      console.log('All Users List => ', data);
-    });
   }
 
 
