@@ -6,6 +6,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 import { TConfigurationComponent } from './tconfiguration.component';
 import { TConfigurationRoutingModule } from './tconfiguration-routing.module';
+import {DataTablesModule} from 'angular-datatables';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { TConfigurationRoutingModule } from './tconfiguration-routing.module';
     TConfigurationRoutingModule,
     ChartsModule,
     BsDropdownModule,
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    DataTablesModule
   ],
   declarations: [ TConfigurationComponent ]
 })

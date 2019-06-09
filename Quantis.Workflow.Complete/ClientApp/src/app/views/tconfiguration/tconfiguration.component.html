@@ -4,7 +4,7 @@
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Key" #searchCol1 />
     </div><br/>
-    <table class="table table-bordered" #ConfigurationTable>
+    <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions">
       <thead style="background: #E6E6E6">
       <tr>
         <th>Key</th>
@@ -13,9 +13,9 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>abc</td>
-        <td>def</td>
+      <tr *ngFor="let row of ConfigTableBodyData; index as i">
+        <td></td>
+        <td></td>
         <td align="center"><button class="btn btn-primary" data-toggle="modal" data-target="#archivedKpiModal">View</button></td>
       </tr>
       </tbody>
