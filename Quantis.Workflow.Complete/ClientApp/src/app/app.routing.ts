@@ -86,6 +86,10 @@ export const routes: Routes = [
       {
         path: 'archivedkpi',
         loadChildren: './views/archivedkpi/archivedkpi.module#ArchivedKpiModule'
+      },
+      {
+        path: 'tconfiguration',
+        loadChildren: './views/tconfiguration/tconfiguration.module#TConfigurationModule'
       }
     ]
   },

@@ -28,4 +28,14 @@ export class ApiService {
         )
       )
   }
+
+  getConfigurations(){
+    return this.http.get('https://api.myjson.com/bins/13h29l')
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      )
+  }
 }

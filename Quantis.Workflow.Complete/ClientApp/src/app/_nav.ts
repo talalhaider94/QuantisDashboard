@@ -108,7 +108,7 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Configurations',
-    url: '/coming-soon',
+    url: '/tconfiguration',
     icon: 'icon-doc'
   },
   {
