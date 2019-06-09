@@ -1,117 +1,51 @@
-<div style="margin-top: -20px;">
-    <div class="table-responsive" style="background: #ffffff; padding: 10px">
-      <br><h2 style="color:#565656">CATALOGO KPI</h2><br>
-      <div class="row">
-          <input type="text" class="form-control ml-3 mr-1" style="width:10%;" placeholder="Titolo Breve" #searchCol2/>
-          <input type="text" class="form-control mr-1" style="width:10%;" placeholder="ID KPI" #searchCol1 />
-          <input type="text" class="form-control mr-1" style="width:10%;" placeholder="Referente" #searchCol3/>
-          <span>&nbsp;&nbsp;</span>
-          <select class="form-control" style="width:10%;" #searchCol4><option value="">All</option></select>
-          <span>&nbsp;&nbsp;</span>
-          <select class="form-control" style="width:10%;" #searchCol5><option value="">All</option></select>
-          <span>&nbsp;&nbsp;</span>
-<!--        <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px;">Filtra</button>-->
-          <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">CSV Export</button>
-      </div><br/>
-      <table class="table table-bordered" #kpiTable>
-        <thead style="background: #E6E6E6">
-        <tr>
-            <th>ABILITATO</th>
-            <th>REMINDER</th>
-            <th>WORKFLOW</th>
-            <th>CONTRACT</th>
-            <th>ID_KPI</th>
-            <th>TITOLO_BREVE</th>
-            <th>CARICAMENTO</th>
-            <th>FREQUENZA</th>
-            <th>DATA_WF</th>
-            <th>DATA_WM</th>
-            <th>REFERENTI</th>
-            <th>CALCOLO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td align="center"><input type="checkbox"/></td>
-            <td align="center"><input type="checkbox"/></td>
-            <td align="center"><input type="checkbox"/></td>
-            <td>AA_44</td>
-            <td>AA_55</td>
-            <td>AA_66</td>
-            <td>AA_77</td>
-            <td>AA_88</td>
-            <td>11/2/2019 18:00:00</td>
-            <td></td>
-            <td align="center"><button class="btn"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-            <td align="center"><button class="btn"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
-          </tr>
-          <tr>
-            <td align="center"><input type="checkbox"/></td>
-            <td align="center"><input type="checkbox"/></td>
-            <td align="center"><input type="checkbox"/></td>
-            <td>BB_44</td>
-            <td>BB_55</td>
-            <td>BB_66</td>
-            <td>BB_77</td>
-            <td>BB_88</td>
-            <td>11/2/2019 18:00:00</td>
-            <td></td>
-            <td align="center"><button class="btn"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-            <td align="center"><button class="btn"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
-            </tr>
-          <tr>
-            <td align="center"><input type="checkbox"/></td>
-            <td align="center"><input type="checkbox"/></td>
-            <td align="center"><input type="checkbox"/></td>
-            <td>CC_44</td>
-            <td>CC_55</td>
-            <td>CC_66</td>
-            <td>CC_77</td>
-            <td>CC_88</td>
-            <td>11/2/2019 18:00:00</td>
-            <td></td>
-            <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-            <td align="center"><button class="btn"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-<div id="referentiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-<!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="classTable" class="table table-bordered">
-          <thead style="background: #E6E6E6">
-            <tr>
-              <th>REFERENTI_INPUT</th>
-              <th>REFERENTI_1</th>
-              <th>REFERENTI_2</th>
-              <th>REFERENTI_3</th>
-            </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
+<div style="margin-top: -25px; padding: 10px">
+  <h2 style="color:#565656">Catalogo</h2><br>
+  <div class="table-responsive" style="background: #ffffff; padding: 10px">
+    <br><h2 style="color:#565656">KPI</h2><br>
+    <div class="row">
+      <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="ID KPI" #searchCol1/>
+      <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2/>
+      <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3/>
+      <span>&nbsp;&nbsp;</span>
+      <select class="form-control" style="width:15%;" #searchCol4><option value="">All</option></select>
+      <span>&nbsp;&nbsp;</span>
+      <select class="form-control" style="width:15%;" #searchCol5><option value="">All</option></select>
+      <span>&nbsp;&nbsp;</span>
+      <button #btnExportCSV>CSV Export</button>
+    </div><br/>
+    <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions">
+      <thead>
+      <tr *ngFor="let row of kpiTableHeadData; index as i">
+        <th>{{row.ABILITATO}}</th>
+        <th>{{row.REMINDER}}</th>
+        <th>{{row.WORKFLOW}}</th>
+        <th>{{row.CONTRACT}}</th>
+        <th>{{row.ID_KPI}}</th>
+        <th>{{row.TITOLO_BREVE}}</th>
+        <th>{{row.CARICAMENTO}}</th>
+        <th>{{row.FREQUENZA}}</th>
+        <th>{{row.DATA_WF}}</th>
+        <th>{{row.DATA_WM}}</th>
+        <th>{{row.REFERENTI}}</th>
+        <th>{{row.CALCOLO}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of kpiTableBodyData; index as i">
+        <td align="center"><input type="checkbox"/></td>
+        <td align="center"><input type="checkbox"/></td>
+        <td align="center"><input type="checkbox"/></td>
+        <td>{{row.contract}}</td>
+        <td>{{row.id_kpi}}</td>
+        <td>{{row.short_name}}</td>
+        <td>{{row.source_type}}</td>
+        <td>{{row.tracking_period}}</td>
+        <td>{{row.wf_last_sent}}</td>
+        <td>{{row.rm_last_sent}}</td>
+        <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
+        <td align="center"><button class="btn"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>

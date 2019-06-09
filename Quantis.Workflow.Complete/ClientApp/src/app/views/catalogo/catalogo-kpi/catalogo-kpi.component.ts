@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { DataTableDirective } from 'angular-datatables';
+import { ApiService } from '../../../_services/api.service';
+
 declare var $;
 var $this;
 
@@ -17,20 +20,79 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('searchCol4') searchCol4: ElementRef;
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
+  @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
+  dtOptions: DataTables.Settings = {
+    'dom': 'rtip',
+    // "columnDefs": [{
+    // "targets": [0,2],
+    // "data": null,
+    // "defaultContent": '<input type="checkbox" />'
+    // }]
+  };
+  kpiTableHeadData = [
+    {
+      ABILITATO: 'ABILITATO',
+      REMINDER: 'REMINDER',
+      WORKFLOW: 'WORKFLOW',
+      CONTRACT: 'CONTRACT',
+      ID_KPI: 'ID_KPI',
+      TITOLO_BREVE: 'TITOLO_BREVE',
+      CARICAMENTO: 'CARICAMENTO',
+      FREQUENZA: 'FREQUENZA',
+      DATA_WF: 'DATA_WF',
+      DATA_WM: 'DATA_WM',
+      REFERENTI: 'REFERENTI',
+      CALCOLO: 'CALCOLO'
+    }];
+  kpiTableBodyData: any = [
+    {
+      id: '1',
+      short_name: 'short name',
+      group_type: 'group type',
+      id_kpi: 'id kpi',
+      id_form: 'id form',
+      kpi_description: 'kpi description',
+      kpi_computing_description: 'kpi computing description',
+      source_type: 'source type',
+      computing_mode: 'computing mode',
+      tracking_period: 'tracking period',
+      measure_unit: 'measure unit',
+      contract: 'contract',
+    }
+  ]
 
-  constructor() {
+  constructor(private apiService: ApiService) {
     $this = this;
   }
 
   ngOnInit() {
-    setTimeout(()=>{this.initializeKpiTable();},1000);
   }
 
-  initializeKpiTable(){
-    let datatable_Ref = $(this.block.nativeElement).DataTable({
-      'dom': 'rtip'
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref)=>{
+      this.setUpDataTableDependencies(dataTable_Ref);
     });
+    this.getAllUsers();
+    this.apiService.getCatalogoKpis().subscribe((data)=>{
+      this.kpiTableBodyData = data;
+      console.log('kpis ', data);
+    })
+  }
+
+  getKpiTableRef(datatableElement: DataTableDirective): any {
+    return datatableElement.dtInstance;
+    // .then((dtInstance: DataTables.Api) => {
+    //     console.log(dtInstance);
+    // });
+  }
+
+  setUpDataTableDependencies(datatable_Ref){
+
+    // let datatable_Ref = $(this.block.nativeElement).DataTable({
+    //   'dom': 'rtip'
+    // });
 
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
@@ -141,7 +203,8 @@ export class CatalogoKpiComponent implements OnInit {
     csv += rows.join("\n");
     console.log(csv);
     var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, "CatalogKpi.csv");
+    //saveAs(csv, "myfile.txt")
+    saveAs(blob, "myfile.txt");
   }
 
   strip_tags(html) {
@@ -149,6 +212,13 @@ export class CatalogoKpiComponent implements OnInit {
     tmp.innerHTML = html;
     return tmp.textContent||tmp.innerText;
   }
+
+  getAllUsers(){
+    this.apiService.getAllUsers().subscribe((data: any) => {
+      console.log('All Users List => ', data);
+    });
+  }
+
 
 
 }
