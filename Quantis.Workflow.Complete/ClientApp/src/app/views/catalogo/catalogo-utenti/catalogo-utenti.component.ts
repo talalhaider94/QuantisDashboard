@@ -21,11 +21,7 @@ export class CatalogoUtentiComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {
     'dom': 'rtip',
-    // "columnDefs": [{
-    // "targets": [0,2],
-    // "data": null,
-    // "defaultContent": '<input type="checkbox" />'
-    // }]
+    'pagingType': 'full_numbers'
   };
 
   UtentiTableBodyData: any = [
