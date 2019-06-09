@@ -4,7 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 
 declare var $;
-var $this;
+let $this;
 
 
 @Component({
@@ -13,6 +13,22 @@ var $this;
   styleUrls: ['./catalogo-kpi.component.scss']
 })
 export class CatalogoKpiComponent implements OnInit {
+
+
+
+  constructor(private apiService: ApiService) {
+    $this = this;
+  }
+  public des = '';
+  public ref: any[] ;
+  public reft: string;
+  public ref1: string;
+  public ref2: string;
+  public ref3: string;
+
+
+
+
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
@@ -21,6 +37,7 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+
 
   dtOptions: DataTables.Settings = {
     'dom': 'rtip',
@@ -45,6 +62,7 @@ export class CatalogoKpiComponent implements OnInit {
       REFERENTI: 'REFERENTI',
       CALCOLO: 'CALCOLO'
     }];
+
   kpiTableBodyData: any = [
     {
       id: '1',
@@ -60,24 +78,42 @@ export class CatalogoKpiComponent implements OnInit {
       measure_unit: 'measure unit',
       contract: 'contract',
     }
-  ]
+  ];
 
-  constructor(private apiService: ApiService) {
-    $this = this;
+  coloBtn( id: string): void {
+    this.des = id;
   }
+
+
+  refren( idd: string): void {
+    console.log(idd);
+
+
+    console.log(this.kpiTableBodyData);
+    for (const i of this.kpiTableBodyData) {
+      if (i.id == idd) {
+        this.reft = i.referent;
+        this.ref1 = i.referent_1;
+        this.ref2 = i.referent_2;
+        this.ref3 = i.referent_3;
+
+      }
+    }
+  }
+
 
   ngOnInit() {
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
-    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref)=>{
+    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref) => {
       this.setUpDataTableDependencies(dataTable_Ref);
     });
-    this.apiService.getCatalogoKpis().subscribe((data)=>{
+    this.apiService.getCatalogoKpis().subscribe((data) => {
       this.kpiTableBodyData = data;
       console.log('kpis ', data);
-    })
+    });
   }
 
   getKpiTableRef(datatableElement: DataTableDirective): any {
@@ -87,7 +123,9 @@ export class CatalogoKpiComponent implements OnInit {
     // });
   }
 
-  setUpDataTableDependencies(datatable_Ref){
+
+
+  setUpDataTableDependencies(datatable_Ref) {
 
     // let datatable_Ref = $(this.block.nativeElement).DataTable({
     //   'dom': 'rtip'
@@ -100,6 +138,9 @@ export class CatalogoKpiComponent implements OnInit {
         .search( this.value )
         .draw();
     });
+
+
+
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
       datatable_Ref
         .columns( 5 )
@@ -113,10 +154,10 @@ export class CatalogoKpiComponent implements OnInit {
         .draw();
     });
     datatable_Ref.columns(3).every( function () {
-      var that = this;
+      const that = this;
 
       // Create the select list and search operation
-      var select = $($this.searchCol4.nativeElement)
+      const select = $($this.searchCol4.nativeElement)
         .on( 'change', function () {
           that
             .search( $(this).val() )
@@ -129,14 +170,14 @@ export class CatalogoKpiComponent implements OnInit {
         .sort()
         .unique()
         .each( function ( d ) {
-          select.append( $('<option value="'+d+'">'+d+'</option>') );
+          select.append( $('<option value="' + d + '">' + d + '</option>') );
         } );
     } );
     datatable_Ref.columns(9).every( function () {
-      var that = this;
+      const that = this;
 
       // Create the select list and search operation
-      var select = $($this.searchCol5.nativeElement)
+      const select = $($this.searchCol5.nativeElement)
         .on( 'change', function () {
           that
             .search( $(this).val() )
@@ -149,7 +190,7 @@ export class CatalogoKpiComponent implements OnInit {
         .sort()
         .unique()
         .each( function ( d ) {
-          select.append( $('<option value="'+d+'">'+d+'</option>') );
+          select.append( $('<option value="' + d + '">' + d + '</option>') );
         } );
     } );
 
@@ -157,59 +198,59 @@ export class CatalogoKpiComponent implements OnInit {
     // export only what is visible right now (filters & paginationapplied)
     $(this.btnExportCSV.nativeElement).click(function (event) {
       event.preventDefault();
-      //$this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
+      // $this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
       $this.table2csv(datatable_Ref, 'full', 'table.dataTables-reports');
     });
   }
 
-
   table2csv(oTable, exportmode, tableElm) {
-    var csv = '';
-    var headers = [];
-    var rows = [];
+    let csv = '';
+    const headers = [];
+    const rows = [];
 
     // Get header names
-    $(tableElm+' thead').find('th').each(function() {
-      var $th = $(this);
-      var text = $th.text();
-      var header = '"' + text + '"';
+    $(tableElm + ' thead').find('th').each(function() {
+      const $th = $(this);
+      const text = $th.text();
+      const header = '"' + text + '"';
       // headers.push(header); // original code
-      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+      // tslint:disable-next-line:max-line-length
+      if (text != '') { headers.push(header); } // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
     });
-    csv += headers.join(',') + "\n";
+    csv += headers.join(',') + '\n';
 
     // get table data
-    if (exportmode == "full") { // total data
-      var totalRows = oTable.data().length;
-      for(let i = 0; i < totalRows; i++) {
-        var row = oTable.row(i).data();
-        console.log(row)
+    if (exportmode == 'full') { // total data
+      const totalRows = oTable.data().length;
+      for (let i = 0; i < totalRows; i++) {
+        let row = oTable.row(i).data();
+        console.log(row);
         row = $this.strip_tags(row);
         rows.push(row);
       }
     } else { // visible rows only
-      $(tableElm+' tbody tr:visible').each(function(index) {
-        var row = [];
-        $(this).find('td').each(function(){
-          var $td = $(this);
-          var text = $td.text();
-          var cell = '"' +text+ '"';
+      $(tableElm + ' tbody tr:visible').each(function(index) {
+        const row = [];
+        $(this).find('td').each(function() {
+          const $td = $(this);
+          const text = $td.text();
+          const cell = '"' + text + '"';
           row.push(cell);
         });
         rows.push(row);
-      })
+      });
     }
-    csv += rows.join("\n");
+    csv += rows.join('\n');
     console.log(csv);
-    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-    //saveAs(csv, "myfile.txt")
-    saveAs(blob, "myfile.txt");
+    const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'});
+    // saveAs(csv, "myfile.txt")
+    saveAs(blob, 'myfile.txt');
   }
 
   strip_tags(html) {
-    var tmp = document.createElement("div");
+    const tmp = document.createElement('div');
     tmp.innerHTML = html;
-    return tmp.textContent||tmp.innerText;
+    return tmp.textContent || tmp.innerText;
   }
 
 
